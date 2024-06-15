@@ -8,13 +8,10 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     if (email === 'user@mail.com' && password === 'User@12345') {
-      navigation.navigate('Home');
-    } 
-    if (email === 'Superadmin@mail.com' && password === 'SuperAdmin@12345') {
-        navigation.navigate('Home');
-      } 
-    else if ((email === 'Admin@mail.com' && password === 'Admin@12345')) {
-      navigation.navigate('ADashboard');
+      navigation.navigate('UserIndex');
+    } else if ((email === 'Admin@mail.com' && password === 'Admin@12345') || 
+               (email === 'Superadmin@mail.com' && password === 'SuperAdmin@12345')) {
+      navigation.navigate('Dashboard');
     } else {
       Alert.alert('Invalid credentials', 'Please check your email and password and try again.');
     }
