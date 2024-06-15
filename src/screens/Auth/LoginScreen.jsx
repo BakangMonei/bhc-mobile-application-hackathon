@@ -1,10 +1,23 @@
-import React from "react";
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const handleLogin = () => {
-    // Handle login logic here
+    if (email === 'user@mail.com' && password === 'User@12345') {
+      navigation.navigate('Home');
+    } 
+    if (email === 'Superadmin@mail.com' && password === 'SuperAdmin@12345') {
+        navigation.navigate('Home');
+      } 
+    else if ((email === 'Admin@mail.com' && password === 'Admin@12345')) {
+      navigation.navigate('ADashboard');
+    } else {
+      Alert.alert('Invalid credentials', 'Please check your email and password and try again.');
+    }
   };
 
   return (
@@ -24,6 +37,8 @@ const LoginScreen = ({ navigation }) => {
             style={styles.input}
             keyboardType="email-address"
             placeholderTextColor="#AD2524"
+            value={email}
+            onChangeText={setEmail}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -33,6 +48,8 @@ const LoginScreen = ({ navigation }) => {
             style={styles.input}
             secureTextEntry
             placeholderTextColor="#AD2524"
+            value={password}
+            onChangeText={setPassword}
           />
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
