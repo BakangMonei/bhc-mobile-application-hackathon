@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-
+import React from "react";
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const LoginScreen = ({ navigation }) => {
   const handleLogin = () => {
@@ -9,21 +9,42 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        placeholder="Email"
-        style={styles.input}
-        keyboardType="email-address"
-      />
-      <TextInput
-        placeholder="Password"
-        style={styles.input}
-        secureTextEntry
-      />
-      <Button title="Login" onPress={handleLogin} />
+      <View style={styles.orangeCircle} />
+      <View style={styles.header}>
+        <Image
+          source={require("../../assets/images/bhc.png")}
+          style={styles.logo}
+        />
+      </View>
+      <View style={styles.formContainer}>
+        <View style={styles.inputContainer}>
+          <Icon name="envelope" size={20} color="#AD2524" style={styles.icon} />
+          <TextInput
+            placeholder="Email"
+            style={styles.input}
+            keyboardType="email-address"
+            placeholderTextColor="#AD2524"
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Icon name="lock" size={20} color="#AD2524" style={styles.icon} />
+          <TextInput
+            placeholder="Password"
+            style={styles.input}
+            secureTextEntry
+            placeholderTextColor="#AD2524"
+          />
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+      </View>
       <Text
         style={styles.registerLink}
-        onPress={() => navigation.navigate('Register')}
+        onPress={() => navigation.navigate("Register")}
       >
         Don't have an account? Sign Up
       </Text>
@@ -34,10 +55,33 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
     backgroundColor: 'white',
+    padding: 16,
+    alignItems: 'center',
+  },
+  orangeCircle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 150,
+    height: 150,
+    backgroundColor: 'orange',
+    borderBottomRightRadius: 100,
+  },
+  header: {
+    alignItems: 'center',
+    position: 'relative',
+    marginBottom: 20,
+    marginTop: 100,
+  },
+  logo: {
+    width: 100,
+    marginTop: 100,
+    height: 100,
+  },
+  formContainer: {
+    width: '100%',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
@@ -45,17 +89,47 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: '#333',
   },
-  input: {
+  inputContainer: {
     width: '100%',
-    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#AD2524',
     borderRadius: 8,
     marginBottom: 16,
+    paddingHorizontal: 10,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    padding: 16,
+    color: 'black',
+  },
+  forgotPassword: {
+    marginBottom: 20,
+    color: '#AD2524',
+    alignSelf: 'flex-start',
+  },
+  loginButton: {
+    width: '100%',
+    padding: 16,
+    backgroundColor: 'orange',
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  loginButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   registerLink: {
-    marginTop: 20,
-    color: '#1E90FF',
+    position: 'absolute',
+    bottom: 20,
+    color: '#AD2524',
+    alignSelf: 'center',
   },
 });
 

@@ -1,11 +1,11 @@
-import React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { View } from 'react-native';
 import { registerRootComponent } from 'expo';
-import SplashScreen from '../src/layouts/SplashScreen';
-import LoginScreen from '../src/screens/Auth/LoginScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+
+import SplashScreen from '../src/layouts/SplashScreen';
+import LoginScreen from '../src/screens/Auth/LoginScreen';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const Stack = createStackNavigator();
 
@@ -35,4 +35,3 @@ const App = () => {
 };
 
 registerRootComponent(App);
-
