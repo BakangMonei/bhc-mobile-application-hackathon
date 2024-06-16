@@ -72,7 +72,8 @@ const RegisterScreen = ({ navigation }) => {
       const user = userCredential.user;
 
       await setDoc(doc(db, "users", user.uid), {
-        fullName: form.fullName,
+        firstName: form.firstName,
+        lastName: form.lastName,
         email: form.email,
         phone: form.phone,
         address: form.address,
@@ -96,14 +97,24 @@ const RegisterScreen = ({ navigation }) => {
           Register
         </Typography>
         <TextField
-          label="Full Name"
-          value={form.fullName}
-          onChange={(e) => handleChange("fullName", e.target.value)}
+          label="First Name"
+          value={form.firstName}
+          onChange={(e) => handleChange("firstName", e.target.value)}
           fullWidth
           margin="normal"
           variant="outlined"
-          error={!!errors.fullName}
-          helperText={errors.fullName}
+          error={!!errors.firstName}
+          helperText={errors.firstName}
+        />
+        <TextField
+          label="Last Name"
+          value={form.lastName}
+          onChange={(e) => handleChange("lastName", e.target.value)}
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          error={!!errors.lastName}
+          helperText={errors.lastName}
         />
         <TextField
           label="Email"

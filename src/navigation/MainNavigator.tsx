@@ -11,8 +11,6 @@ const Tab = createBottomTabNavigator();
 const RecipesStack = () => (
   <Stack.Navigator>
     <Stack.Screen name="PropertyDetailsScreen" component={PropertyDetailsScreen} />
-    {/* <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen} />
-    <Stack.Screen name="AddRecipe" component={AddRecipeScreen} /> */}
   </Stack.Navigator>
 );
 
@@ -33,8 +31,6 @@ const MainNavigator = () => (
         } else if (route.name === "Preferences") {
           iconName = "settings-outline";
         }
-
-        // You can return any component that you like here!
         return <Ionicons name={iconName} size={size} color={color} />;
       },
     })}
@@ -44,10 +40,6 @@ const MainNavigator = () => (
     }}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
-    {/* <Tab.Screen name="Recipes" component={RecipesStack} />
-    <Tab.Screen name="Favorites" component={FavoritesScreen} />
-    <Tab.Screen name="Scales" component={ScalesScreen} />
-    <Tab.Screen name="Preferences" component={PreferencesScreen} /> */}
   </Tab.Navigator>
 );
 

@@ -5,9 +5,9 @@ import SplashScreen from "../components/auth/SplashScreen";
 import MainNavigator from "./MainNavigator"; // You may need to adjust this import based on your folder structure
 import LoginScreen from "../components/auth/LoginScreen";
 import RegistrationScreen from "../components/auth/RegisterScreen";
+import { AppContext } from "../statemanagement/AppContext";
 import ForgotPasswordScreen from "../components/auth/ForgotPassword";
-// import { AppContext } from "@/statemanagement/AppContext";
-// import ChangePasswordScreen from "@/screens/ChangePasswordScreen";
+import HomeScreen from "../components/home/HomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +50,11 @@ const AppNavigator: React.FC = () => {
           <Stack.Screen
             name="Main"
             component={MainNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
             options={{ headerShown: false }}
           />
     </Stack.Navigator>

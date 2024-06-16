@@ -1,66 +1,62 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { TextField, Typography, Card, CardContent, Button, IconButton } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from "react";
+import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  TextField,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  IconButton,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { useNavigation } from "@react-navigation/native";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { db } from "../../services/firebase";
 
 const PropertyDetailsScreen = () => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
+  const [propertiesForRent, setPropertiesForRent] = useState([]);
+  const [propertiesForSale, setPropertiesForSale] = useState([]);
   const navigation = useNavigation();
 
-  const propertiesForRent = [
-    {
-      id: 1,
-      image: 'https://via.placeholder.com/150',
-      title: '2 Bedroom Apartment',
-      description: 'A beautiful 2 bedroom apartment in the city center.',
-    },
-    {
-      id: 2,
-      image: 'https://via.placeholder.com/150',
-      title: 'Luxury Villa',
-      description: 'A luxurious villa with modern amenities.',
-    },
-    {
-        id: 3,
-        image: 'https://via.placeholder.com/150',
-        title: 'Stone House',
-        description: 'A luxurious villa with modern amenities.',
-      },
-  ];
+  useEffect(() => {
+    const fetchProperties = () => {
+      const q = query(collection(db, "properties"));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const rentProperties = [];
+        const saleProperties = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.type === "rent") {
+            rentProperties.push({ ...data, id: doc.id });
+          } else if (data.type === "sale") {
+            saleProperties.push({ ...data, id: doc.id });
+          }
+        });
+        setPropertiesForRent(rentProperties);
+        setPropertiesForSale(saleProperties);
+      });
 
-  const propertiesForSale = [
-    {
-      id: 1,
-      image: 'https://via.placeholder.com/150',
-      title: '3 Bedroom House',
-      description: 'A spacious 3 bedroom house in a quiet neighborhood.',
-    },
-    {
-      id: 2,
-      image: 'https://via.placeholder.com/150',
-      title: 'Modern Condo',
-      description: 'A modern condo with all the latest features.',
-    },
-    {
-        id: 3,
-        image: 'https://via.placeholder.com/150',
-        title: 'Lobatse',
-        description: 'A modern condo with all the latest features.',
-      },
-  ];
+      return unsubscribe;
+    };
+
+    const unsubscribe = fetchProperties();
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
 
   const handlePropertyClick = (property) => {
-    // Handle property click to show details
-    console.log('Property clicked:', property);
+    // Navigate to property detail view or perform other actions
+    console.log("Property clicked:", property);
   };
 
   const handleAddProperty = () => {
-    navigation.navigate('PropertyListingsScreen');
+    navigation.navigate("PropertyListings");
   };
 
   return (
@@ -73,7 +69,11 @@ const PropertyDetailsScreen = () => {
           fullWidth
           variant="outlined"
         />
-        <IconButton onClick={handleAddProperty} color="primary" style={styles.addButton}>
+        <IconButton
+          onClick={handleAddProperty}
+          color="primary"
+          style={styles.addButton}
+        >
           <AddIcon />
         </IconButton>
       </View>
@@ -86,7 +86,11 @@ const PropertyDetailsScreen = () => {
           <Card key={property.id} style={styles.card}>
             <CardContent>
               <TouchableOpacity onPress={() => handlePropertyClick(property)}>
-                <img src={property.image} alt={property.title} style={styles.cardImage} />
+                <img
+                  src={property.image}
+                  alt={property.title}
+                  style={styles.cardImage}
+                />
                 <Typography variant="h6" component="h3">
                   {property.title}
                 </Typography>
@@ -107,7 +111,11 @@ const PropertyDetailsScreen = () => {
           <Card key={property.id} style={styles.card}>
             <CardContent>
               <TouchableOpacity onPress={() => handlePropertyClick(property)}>
-                <img src={property.image} alt={property.title} style={styles.cardImage} />
+                <img
+                  src={property.image}
+                  alt={property.title}
+                  style={styles.cardImage}
+                />
                 <Typography variant="h6" component="h3">
                   {property.title}
                 </Typography>
@@ -128,8 +136,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
   },
   addButton: {
@@ -140,19 +148,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   cardContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
   },
   card: {
-    width: '48%',
+    width: "48%",
     marginBottom: 16,
   },
   cardImage: {
-    width: '100%',
+    width: "100%",
     height: 150,
-    objectFit: 'cover',
+    objectFit: "cover",
   },
 });
 

@@ -83,7 +83,7 @@ const HomeScreen = () => {
       <Typography variant="h4" component="h1" style={styles.title}>
         Welcome,{" "}
         {userDetails
-          ? `${userDetails.fullName} ${userDetails.username}`
+          ? `${userDetails.firstName} ${userDetails.lastName}`
           : "User"}
       </Typography>
       <Typography variant="h6" component="h2" style={styles.sectionTitle}>
