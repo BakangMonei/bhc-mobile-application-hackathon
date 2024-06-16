@@ -1,21 +1,7 @@
-import { registerRootComponent } from "expo";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { registerRootComponent } from 'expo';
+import App from '../src/App';
 
-const Stack = createStackNavigator();
-
-const theme = createTheme({
-  // Customize your MUI theme here
-});
-
-const App = () => {
-  return (
-    <ThemeProvider theme={theme}>
-
-    </ThemeProvider>
-  );
-};
-
+// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
+// It also ensures that whether you load the app in Expo Go or in a native build,
+// the environment is set up appropriately
 registerRootComponent(App);
