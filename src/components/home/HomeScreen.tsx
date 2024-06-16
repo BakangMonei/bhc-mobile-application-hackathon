@@ -3,7 +3,13 @@ import { View, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
 import { Card, CardContent, Typography, Button } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import { AuthContext } from "../../context/AuthContext";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../../services/firebase";
 
 const HomeScreen = () => {
@@ -41,21 +47,27 @@ const HomeScreen = () => {
       }
     };
 
-    const fetchAnnouncements = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "announcements"));
-        const fetchedAnnouncements = [];
-        querySnapshot.forEach((doc) => {
-          fetchedAnnouncements.push({ ...doc.data(), id: doc.id });
-        });
-        setAnnouncements(fetchedAnnouncements);
-      } catch (error) {
-        console.error("Error fetching announcements: ", error);
-      }
+    const fetchAnnouncements = () => {
+      const unsubscribe = onSnapshot(
+        collection(db, "announcements"),
+        (snapshot) => {
+          const fetchedAnnouncements = [];
+          snapshot.forEach((doc) => {
+            fetchedAnnouncements.push({ ...doc.data(), id: doc.id });
+          });
+          setAnnouncements(fetchedAnnouncements);
+        }
+      );
+
+      return unsubscribe;
     };
 
     fetchUserDetails();
-    fetchAnnouncements();
+    const unsubscribeAnnouncements = fetchAnnouncements();
+
+    return () => {
+      unsubscribeAnnouncements();
+    };
   }, [currentUser]);
 
   if (loading) {
@@ -77,18 +89,20 @@ const HomeScreen = () => {
       <Typography variant="h6" component="h2" style={styles.sectionTitle}>
         Latest Announcements
       </Typography>
-      {announcements.map((announcement) => (
-        <Card key={announcement.id} style={styles.card}>
-          <CardContent>
-            <Typography variant="h6" component="h2">
-              {announcement.title}
-            </Typography>
-            <Typography variant="body2" component="p">
-              {announcement.content}
-            </Typography>
-          </CardContent>
-        </Card>
-      ))}
+      <Carousel>
+        {announcements.map((announcement) => (
+          <Card key={announcement.id} style={styles.card}>
+            <CardContent>
+              <Typography variant="h6" component="h2">
+                {announcement.title}
+              </Typography>
+              <Typography variant="body2" component="p">
+                {announcement.content}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </Carousel>
       <Typography variant="h6" component="h2" style={styles.sectionTitle}>
         Quick Actions
       </Typography>
@@ -96,6 +110,9 @@ const HomeScreen = () => {
         {carouselItems.map((item, index) => (
           <Card key={index} style={styles.card}>
             <CardContent>
+              <Typography variant="h6" component="h2">
+                {item.title}
+              </Typography>
               <Button
                 variant="contained"
                 color="primary"

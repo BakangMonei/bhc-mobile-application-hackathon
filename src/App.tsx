@@ -5,6 +5,7 @@ import SplashScreen from './components/auth/SplashScreen';
 import LoginScreen from './components/auth/LoginScreen';
 import RegisterScreen from './components/auth/RegisterScreen';
 import BottomNav from './components/common/BottomNav';
+import PropertyListingsScreen from './components/properties/PropertyListingsScreen';
 import { AuthProvider } from './context/AuthContext';
 
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ const App = () => {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Home" component={BottomNav} />
+          <Stack.Screen name="PropertyListingsScreen" component={PropertyListingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
