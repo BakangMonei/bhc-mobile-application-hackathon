@@ -1,21 +1,47 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextField, Button, Typography, Link } from '@mui/material';
-import { auth } from "../../services/firebase";
+import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
+import { TextField, Button, Typography, Link } from "@mui/material";
+import { auth, db } from "../../services/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        navigation.replace('Home');
-      })
-      .catch(error => {
-        console.error(error);
-      });
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      const q = query(collection(db, "users"), where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach((doc) => {
+          const userData = doc.data();
+          if (userData.role === "s_admin") {
+            navigation.replace("SuperAdminDashboard");
+          } else if (userData.role === "admin") {
+            navigation.replace("AdminDashboard");
+          } else {
+            navigation.replace("Home");
+          }
+        });
+      } else {
+        console.error("No such document!");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,13 +72,14 @@ const LoginScreen = ({ navigation }) => {
         fullWidth
         onClick={handleLogin}
         style={styles.button}
+        disabled={loading}
       >
-        Login
+        {loading ? "Logging in..." : "Login"}
       </Button>
       <Link
         component="button"
         variant="body2"
-        onClick={() => navigation.navigate('ForgotPassword')}
+        onClick={() => navigation.navigate("ForgotPassword")}
         style={styles.link}
       >
         Forgot Password?
@@ -60,7 +87,7 @@ const LoginScreen = ({ navigation }) => {
       <Link
         component="button"
         variant="body2"
-        onClick={() => navigation.navigate('Register')}
+        onClick={() => navigation.navigate("Register")}
         style={styles.link}
       >
         Don't have an account? Register
@@ -72,19 +99,19 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 16,
   },
   title: {
     marginBottom: 24,
-    textAlign: 'center',
+    textAlign: "center",
   },
   button: {
     marginTop: 16,
   },
   link: {
     marginTop: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 
