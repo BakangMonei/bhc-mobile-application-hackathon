@@ -13,27 +13,23 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      const q = query(collection(db, "users"), where("email", "==", email));
-      const querySnapshot = await getDocs(q);
+      const userQuery = query(collection(db, "users"), where("email", "==", email));
+      const adminQuery = query(collection(db, "admins"), where("email", "==", email));
+      const superAdminQuery = query(collection(db, "s_admin"), where("email", "==", email));
 
-      if (!querySnapshot.empty) {
-        querySnapshot.forEach((doc) => {
-          const userData = doc.data();
-          if (userData.role === "s_admin") {
-            navigation.replace("SuperAdminDashboard");
-          } else if (userData.role === "admin") {
-            navigation.replace("AdminDashboard");
-          } else {
-            navigation.replace("Home");
-          }
-        });
+      const userSnapshot = await getDocs(userQuery);
+      const adminSnapshot = await getDocs(adminQuery);
+      const superAdminSnapshot = await getDocs(superAdminQuery);
+
+      if (!superAdminSnapshot.empty) {
+        navigation.replace("SuperAdminDashboard");
+      } else if (!adminSnapshot.empty) {
+        navigation.replace("AdminDashboard");
+      } else if (!userSnapshot.empty) {
+        navigation.replace("Home");
       } else {
         console.error("No such document!");
       }
