@@ -55,19 +55,11 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topRightCircle}></View>
-      <Image source={require('../../assets/images/bhc.png')} style={styles.logo} />
-      <Link
-        component="button"
-        variant="body2"
-        onClick={() => navigation.navigate("ForgotPassword")}
-        style={styles.forgotPasswordLink}
-      >
-        Forgot Password?
-      </Link>
-      <Typography variant="h4" component="h1" style={styles.title}>
-        Login
-      </Typography>
+      <View style={styles.topLeftCircle}></View>
+      <Image
+        source={require("../../assets/images/bhc.png")}
+        style={styles.logo}
+      />
       <TextField
         label="Email"
         value={email}
@@ -85,6 +77,14 @@ const LoginScreen = ({ navigation }) => {
         margin="normal"
         variant="outlined"
       />
+      <Link
+        component="button"
+        variant="body2"
+        onClick={() => navigation.navigate("ForgotPassword")}
+        style={styles.forgotPasswordLink}
+      >
+        Forgot Password?
+      </Link>
       <Button
         variant="contained"
         color="primary"
@@ -114,15 +114,14 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
   },
-  topRightCircle: {
+  topLeftCircle: {
     position: "absolute",
-    top: 0,
-    right: 0,
+    top: -20,
+    left: -20,
     width: 100,
     height: 100,
     borderRadius: 50,
     backgroundColor: "orange",
-    zIndex: 1,
   },
   logo: {
     width: 100,
@@ -141,9 +140,8 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   forgotPasswordLink: {
-    position: "absolute",
-    top: 20,
-    right: 20,
+    marginTop: 4,
+    alignSelf: "flex-start",
     zIndex: 2,
   },
   registerLink: {
