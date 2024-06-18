@@ -12,9 +12,11 @@ import ProfileScreen from '../profile/ProfileScreen';
 const Tab = createBottomTabNavigator();
 
 const BottomNav = () => {
+
+  // screenOptions={{ headerShown: false }}
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({ route,  }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName;
 

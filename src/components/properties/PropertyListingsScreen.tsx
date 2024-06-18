@@ -52,7 +52,7 @@ const PropertyListingsScreen = ({ navigation }) => {
       if (image) {
         const response = await fetch(image);
         const blob = await response.blob();
-        const storageRef = ref(storage, `images/${Date.now()}-${blob.name}`);
+        const storageRef = ref(storage, `images/${Date.now()}`);
         const snapshot = await uploadBytes(storageRef, blob);
         imageUrl = await getDownloadURL(snapshot.ref);
       }
@@ -64,12 +64,23 @@ const PropertyListingsScreen = ({ navigation }) => {
       };
       await addDoc(collection(db, "properties"), propertyData);
 
-      Alert.alert("Success", "Property added successfully", [
-        {
-          text: "OK",
-          onPress: () => navigation.navigate("PropertyDetailsScreen"),
-        },
-      ]);
+      setForm({
+        title: "",
+        description: "",
+        price: "",
+        type: "rent",
+        date: serverTimestamp(),
+      });
+      setImage(null);
+
+      setTimeout(() => {
+        Alert.alert("Success", "Property added successfully", [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("PropertyDetailsScreen"),
+          },
+        ]);
+      }, 100); // Adding a small timeout to ensure state is cleared first
     } catch (error) {
       console.error("Error adding property:", error);
       Alert.alert("Error", "Error adding property. Please try again.");
