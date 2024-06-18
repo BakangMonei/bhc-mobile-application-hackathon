@@ -7,7 +7,17 @@ import {
   Image,
   Alert,
 } from "react-native";
-import { Typography, Card, CardContent, IconButton, Fab } from "@mui/material";
+import {
+  Typography,
+  Card,
+  CardContent,
+  IconButton,
+  Fab,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import {
   collection,
   query,
@@ -26,6 +36,7 @@ const PropertyDetailsScreen = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const [propertiesForRent, setPropertiesForRent] = useState([]);
   const [propertiesForSale, setPropertiesForSale] = useState([]);
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     const fetchProperties = () => {
@@ -55,12 +66,10 @@ const PropertyDetailsScreen = ({ navigation }) => {
   }, []);
 
   const handlePropertyClick = (property) => {
-    // Navigate to property detail view or perform other actions
-    console.log("Property clicked:", property);
+    navigation.navigate("ApplicationFormScreen", { property });
   };
 
   const handleEditProperty = (property) => {
-    // Implement edit functionality
     console.log("Edit property:", property);
   };
 
@@ -79,14 +88,34 @@ const PropertyDetailsScreen = ({ navigation }) => {
     navigation.navigate("PropertyListingsScreen");
   };
 
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const filteredPropertiesForRent = propertiesForRent.filter((property) =>
+    property.title.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  const filteredPropertiesForSale = propertiesForSale.filter((property) =>
+    property.title.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <FormControl fullWidth margin="normal" variant="outlined">
+          <InputLabel>Filter</InputLabel>
+          <Select label="Filter" value={filter} onChange={handleFilterChange}>
+            <MenuItem value="">All</MenuItem>
+            <MenuItem value="rent">Rent</MenuItem>
+            <MenuItem value="sale">Sale</MenuItem>
+          </Select>
+        </FormControl>
         <Typography variant="h5" component="h2" style={styles.sectionTitle}>
           Properties for Rent
         </Typography>
         <Carousel>
-          {propertiesForRent.map((property) => (
+          {filteredPropertiesForRent.map((property) => (
             <Card key={property.id} style={styles.card}>
               <CardContent>
                 <TouchableOpacity onPress={() => handlePropertyClick(property)}>
@@ -137,7 +166,7 @@ const PropertyDetailsScreen = ({ navigation }) => {
           Properties for Sale
         </Typography>
         <Carousel>
-          {propertiesForSale.map((property) => (
+          {filteredPropertiesForSale.map((property) => (
             <Card key={property.id} style={styles.card}>
               <CardContent>
                 <TouchableOpacity onPress={() => handlePropertyClick(property)}>
