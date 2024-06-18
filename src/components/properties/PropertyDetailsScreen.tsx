@@ -1,28 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
-  ScrollView,
   StyleSheet,
+  ScrollView,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
+import { Typography, Card, CardContent, IconButton, Fab } from "@mui/material";
 import {
-  TextField,
-  Typography,
-  Card,
-  CardContent,
-  IconButton,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { useNavigation } from "@react-navigation/native";
-import { collection, onSnapshot, query } from "firebase/firestore";
+  collection,
+  query,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "../../services/firebase";
+import { AuthContext } from "../../context/AuthContext";
+import Carousel from "react-material-ui-carousel";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 
-const PropertyDetailsScreen = () => {
-  const [search, setSearch] = useState("");
+const PropertyDetailsScreen = ({ navigation }) => {
+  const { currentUser } = useContext(AuthContext);
   const [propertiesForRent, setPropertiesForRent] = useState([]);
   const [propertiesForSale, setPropertiesForSale] = useState([]);
-  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchProperties = () => {
@@ -51,13 +54,25 @@ const PropertyDetailsScreen = () => {
     };
   }, []);
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
-
   const handlePropertyClick = (property) => {
     // Navigate to property detail view or perform other actions
     console.log("Property clicked:", property);
+  };
+
+  const handleEditProperty = (property) => {
+    // Implement edit functionality
+    console.log("Edit property:", property);
+  };
+
+  const handleDeleteProperty = async (property) => {
+    try {
+      await deleteDoc(doc(db, "properties", property.id));
+      console.log("Property deleted successfully");
+      Alert.alert("Success", "Property deleted successfully");
+    } catch (error) {
+      console.error("Error deleting property:", error);
+      Alert.alert("Error", "Error deleting property. Please try again.");
+    }
   };
 
   const handleAddProperty = () => {
@@ -65,111 +80,146 @@ const PropertyDetailsScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextField
-          label="Search"
-          value={search}
-          onChange={handleSearchChange}
-          fullWidth
-          variant="outlined"
-        />
-        <IconButton
-          onClick={handleAddProperty}
-          color="primary"
-          style={styles.addButton}
-        >
-          <AddIcon />
-        </IconButton>
-      </View>
-
-      <Typography variant="h5" component="h2" style={styles.sectionTitle}>
-        Properties for Rent
-      </Typography>
-      <View style={styles.cardContainer}>
-        {propertiesForRent.map((property) => (
-          <Card key={property.id} style={styles.card}>
-            <CardContent>
-              <TouchableOpacity onPress={() => handlePropertyClick(property)}>
-                <Image
-                  source={{ uri: property.image }}
-                  style={styles.cardImage}
-                />
-                <Typography variant="h6" component="h3">
-                  {property.title}
-                </Typography>
-                <Typography variant="body2" component="p">
-                  {property.description}
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Price: {property.price}
-                </Typography>
-              </TouchableOpacity>
-            </CardContent>
-          </Card>
-        ))}
-      </View>
-
-      <Typography variant="h5" component="h2" style={styles.sectionTitle}>
-        Properties for Sale
-      </Typography>
-      <View style={styles.cardContainer}>
-        {propertiesForSale.map((property) => (
-          <Card key={property.id} style={styles.card}>
-            <CardContent>
-              <TouchableOpacity onPress={() => handlePropertyClick(property)}>
-                <Image
-                  source={{ uri: property.image }}
-                  style={styles.cardImage}
-                />
-                <Typography variant="h6" component="h3">
-                  {property.title}
-                </Typography>
-                <Typography variant="body2" component="p">
-                  {property.description}
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Price: {property.price}
-                </Typography>
-              </TouchableOpacity>
-            </CardContent>
-          </Card>
-        ))}
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Typography variant="h5" component="h2" style={styles.sectionTitle}>
+          Properties for Rent
+        </Typography>
+        <Carousel>
+          {propertiesForRent.map((property) => (
+            <Card key={property.id} style={styles.card}>
+              <CardContent>
+                <TouchableOpacity onPress={() => handlePropertyClick(property)}>
+                  <Image
+                    source={{ uri: property.image }}
+                    style={styles.cardImage}
+                  />
+                  <Typography variant="h6" component="h3">
+                    {property.title}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    {property.description}
+                  </Typography>
+                  {property.date && (
+                    <Typography variant="body2" component="p">
+                      Posted on:{" "}
+                      {new Date(
+                        property.date.seconds * 1000
+                      ).toLocaleDateString()}{" "}
+                      at{" "}
+                      {new Date(
+                        property.date.seconds * 1000
+                      ).toLocaleTimeString()}
+                    </Typography>
+                  )}
+                </TouchableOpacity>
+                {property.uid === currentUser.uid && (
+                  <>
+                    <IconButton
+                      onClick={() => handleEditProperty(property)}
+                      color="primary"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDeleteProperty(property)}
+                      color="secondary"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </Carousel>
+        <Typography variant="h5" component="h2" style={styles.sectionTitle}>
+          Properties for Sale
+        </Typography>
+        <Carousel>
+          {propertiesForSale.map((property) => (
+            <Card key={property.id} style={styles.card}>
+              <CardContent>
+                <TouchableOpacity onPress={() => handlePropertyClick(property)}>
+                  <Image
+                    source={{ uri: property.image }}
+                    style={styles.cardImage}
+                  />
+                  <Typography variant="h6" component="h3">
+                    {property.title}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    {property.description}
+                  </Typography>
+                  {property.date && (
+                    <Typography variant="body2" component="p">
+                      Posted on:{" "}
+                      {new Date(
+                        property.date.seconds * 1000
+                      ).toLocaleDateString()}{" "}
+                      at{" "}
+                      {new Date(
+                        property.date.seconds * 1000
+                      ).toLocaleTimeString()}
+                    </Typography>
+                  )}
+                </TouchableOpacity>
+                {property.uid === currentUser.uid && (
+                  <>
+                    <IconButton
+                      onClick={() => handleEditProperty(property)}
+                      color="primary"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDeleteProperty(property)}
+                      color="secondary"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </Carousel>
+      </ScrollView>
+      <Fab
+        color="primary"
+        aria-label="add"
+        style={styles.fab}
+        onClick={handleAddProperty}
+      >
+        <AddIcon />
+      </Fab>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  scrollContainer: {
     padding: 16,
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  addButton: {
-    marginLeft: 16,
   },
   sectionTitle: {
     marginTop: 16,
     marginBottom: 8,
   },
-  cardContainer: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
   card: {
-    width: "48%",
     marginBottom: 16,
   },
   cardImage: {
     width: "100%",
     height: 150,
     objectFit: "cover",
+  },
+  fab: {
+    position: "absolute",
+    bottom: 16,
+    right: 16,
   },
 });
 

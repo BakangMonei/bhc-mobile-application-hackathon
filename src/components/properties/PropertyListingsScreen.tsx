@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { TextField, Button, Typography, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../services/firebase';
+import React, { useState } from "react";
+import { View, StyleSheet, ScrollView, Alert, Image } from "react-native";
+import {
+  TextField,
+  Button,
+  Typography,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Avatar,
+} from "@mui/material";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db, storage } from "../../services/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import * as ImagePicker from "expo-image-picker";
 
-const PropertyListingsScreen = () => {
+const PropertyListingsScreen = ({ navigation }) => {
   const [form, setForm] = useState({
-    title: '',
-    description: '',
-    price: '',
-    type: 'rent', // or 'sale'
-    image: '',
+    title: "",
+    description: "",
+    price: "",
+    type: "rent", // or 'sale'
+    date: serverTimestamp(),
   });
+  const [image, setImage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,13 +33,46 @@ const PropertyListingsScreen = () => {
     });
   };
 
+  const handleImagePick = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    } else {
+      Alert.alert("You did not select any image.");
+    }
+  };
+
   const handleSubmit = async () => {
     try {
-      await addDoc(collection(db, 'properties'), form);
-      // Clear the form or navigate back
-      console.log('Property added successfully');
+      let imageUrl = "";
+      if (image) {
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const storageRef = ref(storage, `images/${Date.now()}-${blob.name}`);
+        const snapshot = await uploadBytes(storageRef, blob);
+        imageUrl = await getDownloadURL(snapshot.ref);
+      }
+
+      const propertyData = {
+        ...form,
+        image: imageUrl,
+        date: serverTimestamp(),
+      };
+      await addDoc(collection(db, "properties"), propertyData);
+
+      Alert.alert("Success", "Property added successfully", [
+        {
+          text: "OK",
+          onPress: () => navigation.navigate("PropertyDetailsScreen"),
+        },
+      ]);
     } catch (error) {
-      console.error('Error adding property:', error);
+      console.error("Error adding property:", error);
+      Alert.alert("Error", "Error adding property. Please try again.");
     }
   };
 
@@ -63,15 +108,6 @@ const PropertyListingsScreen = () => {
         margin="normal"
         variant="outlined"
       />
-      <TextField
-        label="Image URL"
-        name="image"
-        value={form.image}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        variant="outlined"
-      />
       <FormControl fullWidth margin="normal" variant="outlined">
         <InputLabel>Type</InputLabel>
         <Select
@@ -84,7 +120,26 @@ const PropertyListingsScreen = () => {
           <MenuItem value="sale">Sale</MenuItem>
         </Select>
       </FormControl>
-      <Button variant="contained" color="primary" onClick={handleSubmit} style={styles.button}>
+      <View style={styles.imageContainer}>
+        {image ? (
+          <Image source={{ uri: image }} style={styles.avatar} />
+        ) : (
+          <Avatar style={styles.avatarPlaceholder}>Add Image</Avatar>
+        )}
+        <Button
+          variant="outlined"
+          onClick={handleImagePick}
+          style={styles.button}
+        >
+          {image ? "Change Image" : "Upload Image"}
+        </Button>
+      </View>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSubmit}
+        style={styles.button}
+      >
         Add Property
       </Button>
     </ScrollView>
@@ -96,11 +151,30 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
   },
   button: {
     marginTop: 16,
+  },
+  imageContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    marginRight: 16,
+  },
+  avatarPlaceholder: {
+    width: 100,
+    height: 100,
+    marginRight: 16,
+    backgroundColor: "#e0e0e0",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
