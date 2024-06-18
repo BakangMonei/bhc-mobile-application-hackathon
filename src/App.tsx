@@ -10,6 +10,7 @@ import BottomNav from './components/common/BottomNav';
 import SuperAdminDashboard from './components/common/SuperAdminBottomNav';
 import AdminDashboard from './components/common/AdminBottomNav';
 import AddUserForm from './components/forms/AddUserForm';
+import PropertyDetailsScreen from './components/properties/PropertyDetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ const App = () => {
           <Stack.Screen name="SuperAdminDashboard" component={SuperAdminDashboard} />
           <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
           <Stack.Screen name="AddUserForm" component={AddUserForm} />
+          <Stack.Screen name="PropertyDetailsScreen" component={PropertyDetailsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

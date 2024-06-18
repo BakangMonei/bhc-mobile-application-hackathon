@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { TextField, Button, Typography } from '@mui/material';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { TextField, Button, Typography, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 
@@ -14,9 +14,10 @@ const PropertyListingsScreen = () => {
   });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -71,6 +72,18 @@ const PropertyListingsScreen = () => {
         margin="normal"
         variant="outlined"
       />
+      <FormControl fullWidth margin="normal" variant="outlined">
+        <InputLabel>Type</InputLabel>
+        <Select
+          label="Type"
+          name="type"
+          value={form.type}
+          onChange={handleChange}
+        >
+          <MenuItem value="rent">Rent</MenuItem>
+          <MenuItem value="sale">Sale</MenuItem>
+        </Select>
+      </FormControl>
       <Button variant="contained" color="primary" onClick={handleSubmit} style={styles.button}>
         Add Property
       </Button>

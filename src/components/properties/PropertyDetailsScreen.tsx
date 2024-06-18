@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import {
   TextField,
   Typography,
   Card,
   CardContent,
-  Button,
   IconButton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -56,7 +61,7 @@ const PropertyDetailsScreen = () => {
   };
 
   const handleAddProperty = () => {
-    navigation.navigate("PropertyListings");
+    navigation.navigate("PropertyListingsScreen");
   };
 
   return (
@@ -86,9 +91,8 @@ const PropertyDetailsScreen = () => {
           <Card key={property.id} style={styles.card}>
             <CardContent>
               <TouchableOpacity onPress={() => handlePropertyClick(property)}>
-                <img
-                  src={property.image}
-                  alt={property.title}
+                <Image
+                  source={{ uri: property.image }}
                   style={styles.cardImage}
                 />
                 <Typography variant="h6" component="h3">
@@ -96,6 +100,9 @@ const PropertyDetailsScreen = () => {
                 </Typography>
                 <Typography variant="body2" component="p">
                   {property.description}
+                </Typography>
+                <Typography variant="body2" component="p">
+                  Price: {property.price}
                 </Typography>
               </TouchableOpacity>
             </CardContent>
@@ -111,9 +118,8 @@ const PropertyDetailsScreen = () => {
           <Card key={property.id} style={styles.card}>
             <CardContent>
               <TouchableOpacity onPress={() => handlePropertyClick(property)}>
-                <img
-                  src={property.image}
-                  alt={property.title}
+                <Image
+                  source={{ uri: property.image }}
                   style={styles.cardImage}
                 />
                 <Typography variant="h6" component="h3">
@@ -121,6 +127,9 @@ const PropertyDetailsScreen = () => {
                 </Typography>
                 <Typography variant="body2" component="p">
                   {property.description}
+                </Typography>
+                <Typography variant="body2" component="p">
+                  Price: {property.price}
                 </Typography>
               </TouchableOpacity>
             </CardContent>

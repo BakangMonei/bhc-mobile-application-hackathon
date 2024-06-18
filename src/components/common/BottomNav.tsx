@@ -7,7 +7,6 @@ import MaintenanceRequestsScreen from '../maintenance/MaintenanceRequestsScreen'
 import PaymentsScreen from '../payments/PaymentsScreen';
 import PropertyDetailsScreen from '../properties/PropertyDetailsScreen';
 import ProfileScreen from '../profile/ProfileScreen';
-import PropertyListingsScreen from '../properties/PropertyListingsScreen';
 
 
 const Tab = createBottomTabNavigator();
