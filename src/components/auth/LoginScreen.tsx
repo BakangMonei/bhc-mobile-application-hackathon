@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import { TextField, Button, Typography, Link } from "@mui/material";
 import { auth, db } from "../../services/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -55,6 +55,16 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.topRightCircle}></View>
+      <Image source={require('../../assets/images/bhc.png')} style={styles.logo} />
+      <Link
+        component="button"
+        variant="body2"
+        onClick={() => navigation.navigate("ForgotPassword")}
+        style={styles.forgotPasswordLink}
+      >
+        Forgot Password?
+      </Link>
       <Typography variant="h4" component="h1" style={styles.title}>
         Login
       </Typography>
@@ -88,16 +98,8 @@ const LoginScreen = ({ navigation }) => {
       <Link
         component="button"
         variant="body2"
-        onClick={() => navigation.navigate("ForgotPassword")}
-        style={styles.link}
-      >
-        Forgot Password?
-      </Link>
-      <Link
-        component="button"
-        variant="body2"
         onClick={() => navigation.navigate("Register")}
-        style={styles.link}
+        style={styles.registerLink}
       >
         Don't have an account? Register
       </Link>
@@ -110,17 +112,45 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 16,
+    backgroundColor: "#fff",
+  },
+  topRightCircle: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "orange",
+    zIndex: 1,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    alignSelf: "center",
+    marginBottom: 24,
+    zIndex: 2,
   },
   title: {
     marginBottom: 24,
     textAlign: "center",
+    zIndex: 2,
   },
   button: {
     marginTop: 16,
+    zIndex: 2,
   },
-  link: {
-    marginTop: 16,
-    textAlign: "center",
+  forgotPasswordLink: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    zIndex: 2,
+  },
+  registerLink: {
+    position: "absolute",
+    bottom: 20,
+    alignSelf: "center",
+    zIndex: 2,
   },
 });
 
