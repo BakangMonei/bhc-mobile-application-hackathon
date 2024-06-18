@@ -8,7 +8,8 @@ import { doc, setDoc } from "firebase/firestore";
 
 const RegisterScreen = ({ navigation }) => {
   const [form, setForm] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     address: "",

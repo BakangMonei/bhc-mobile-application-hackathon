@@ -13,12 +13,25 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
 
-      const userQuery = query(collection(db, "users"), where("email", "==", email));
-      const adminQuery = query(collection(db, "admins"), where("email", "==", email));
-      const superAdminQuery = query(collection(db, "s_admin"), where("email", "==", email));
+      const userQuery = query(
+        collection(db, "users"),
+        where("email", "==", email)
+      );
+      const adminQuery = query(
+        collection(db, "admins"),
+        where("email", "==", email)
+      );
+      const superAdminQuery = query(
+        collection(db, "s_admin"),
+        where("email", "==", email)
+      );
 
       const userSnapshot = await getDocs(userQuery);
       const adminSnapshot = await getDocs(adminQuery);

@@ -1,8 +1,8 @@
 import React from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { Typography, Card, CardContent, Grid } from "@mui/material";
 
-const SuperAdminDashboard = () => {
+const SuperAdminDashboard = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Typography variant="h4" component="h1" style={styles.title}>
@@ -56,6 +56,36 @@ const SuperAdminDashboard = () => {
               </Typography>
             </CardContent>
           </Card>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TouchableOpacity onPress={() => navigation.navigate("AddUserForm")}>
+            <Card style={styles.card}>
+              <CardContent>
+                <Typography variant="h6" component="h2">
+                  Create New Users
+                </Typography>
+                <Typography variant="body2" component="p">
+                  Create a new user
+                </Typography>
+              </CardContent>
+            </Card>
+          </TouchableOpacity>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("SomeOtherScreen")}
+          >
+            <Card style={styles.card}>
+              <CardContent>
+                <Typography variant="h6" component="h2">
+                  xxxxxxxxxxxxxxxxx
+                </Typography>
+                <Typography variant="body2" component="p">
+                  xxxxxxxxxxxxxxxxx
+                </Typography>
+              </CardContent>
+            </Card>
+          </TouchableOpacity>
         </Grid>
       </Grid>
     </ScrollView>

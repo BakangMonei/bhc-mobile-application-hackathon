@@ -9,6 +9,7 @@ import { AuthProvider } from './context/AuthContext';
 import BottomNav from './components/common/BottomNav';
 import SuperAdminDashboard from './components/common/SuperAdminBottomNav';
 import AdminDashboard from './components/common/AdminBottomNav';
+import AddUserForm from './components/forms/AddUserForm';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ const App = () => {
           <Stack.Screen name="Home" component={BottomNav} />
           <Stack.Screen name="SuperAdminDashboard" component={SuperAdminDashboard} />
           <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+          <Stack.Screen name="AddUserForm" component={AddUserForm} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
