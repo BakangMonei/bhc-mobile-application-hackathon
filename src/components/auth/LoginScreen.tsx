@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Image } from "react-native";
-import { TextField, Button, Typography, Link } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Link,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { auth, db } from "../../services/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -8,9 +16,38 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({ email: "", password: "" });
+
+  const validateInputs = () => {
+    let valid = true;
+    let emailError = "";
+    let passwordError = "";
+
+    if (!email) {
+      emailError = "Email is required";
+      valid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      emailError = "Email address is invalid";
+      valid = false;
+    }
+
+    if (!password) {
+      passwordError = "Password is required";
+      valid = false;
+    } else if (password.length < 6) {
+      passwordError = "Password must be at least 6 characters";
+      valid = false;
+    }
+
+    setErrors({ email: emailError, password: passwordError });
+    return valid;
+  };
 
   const handleLogin = async () => {
+    if (!validateInputs()) return;
+
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -53,6 +90,8 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
   return (
     <View style={styles.container}>
       <View style={styles.topLeftCircle}></View>
@@ -67,15 +106,40 @@ const LoginScreen = ({ navigation }) => {
         fullWidth
         margin="normal"
         variant="outlined"
+        error={!!errors.email}
+        helperText={errors.email}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Email />
+            </InputAdornment>
+          ),
+        }}
       />
       <TextField
         label="Password"
-        type="password"
+        type={showPassword ? "text" : "password"}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         fullWidth
         margin="normal"
         variant="outlined"
+        error={!!errors.password}
+        helperText={errors.password}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Lock />
+            </InputAdornment>
+          ),
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={handleClickShowPassword}>
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
       <Link
         component="button"
@@ -87,7 +151,6 @@ const LoginScreen = ({ navigation }) => {
       </Link>
       <Button
         variant="contained"
-        color="primary"
         fullWidth
         onClick={handleLogin}
         style={styles.button}
@@ -116,16 +179,16 @@ const styles = StyleSheet.create({
   },
   topLeftCircle: {
     position: "absolute",
-    top: -20,
-    left: -20,
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    top: -25,
+    left: -25,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
     backgroundColor: "orange",
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     alignSelf: "center",
     marginBottom: 24,
     zIndex: 2,
@@ -138,6 +201,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     zIndex: 2,
+    backgroundColor: "orange",
   },
   forgotPasswordLink: {
     marginTop: 4,
