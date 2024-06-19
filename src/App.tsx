@@ -12,6 +12,7 @@ import AdminDashboard from './components/common/AdminBottomNav';
 import AddUserForm from './components/forms/AddUserForm';
 import PropertyDetailsScreen from './components/properties/PropertyDetailsScreen';
 import ApplicationFormScreen from './components/properties/ApplicationFormScreen';
+import ChangePassword from './components/profile/ChangePassword';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ const App = () => {
           <Stack.Screen name="AddUserForm" component={AddUserForm} />
           <Stack.Screen name="PropertyDetailsScreen" component={PropertyDetailsScreen} />
           <Stack.Screen name="ApplicationFormScreen" component={ApplicationFormScreen} />
+          <Stack.Screen name="ChangePassword" component={ChangePassword} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

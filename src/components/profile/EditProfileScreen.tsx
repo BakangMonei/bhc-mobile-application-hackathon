@@ -1,28 +1,28 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { TextField, Button, Typography } from '@mui/material';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../services/firebase';
-import { AuthContext } from '../../context/AuthContext';
+import React, { useContext, useState, useEffect } from "react";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { TextField, Button, Typography } from "@mui/material";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../services/firebase";
+import { AuthContext } from "../../context/AuthContext";
 
 const EditProfileScreen = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const [profile, setProfile] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
+    firstName: "",
+    lastName: "",
+    email: "",
   });
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const docRef = doc(db, 'users', currentUser.uid);
+        const docRef = doc(db, "users", currentUser.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setProfile(docSnap.data());
         }
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        console.error("Error fetching profile:", error);
       }
     };
 
@@ -38,12 +38,12 @@ const EditProfileScreen = ({ navigation }) => {
 
   const handleSubmit = async () => {
     try {
-      const docRef = doc(db, 'users', currentUser.uid);
+      const docRef = doc(db, "users", currentUser.uid);
       await updateDoc(docRef, profile);
-      console.log('Profile updated successfully');
+      console.log("Profile updated successfully");
       navigation.goBack();
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error("Error updating profile:", error);
     }
   };
 
@@ -80,7 +80,12 @@ const EditProfileScreen = ({ navigation }) => {
         variant="outlined"
         disabled
       />
-      <Button variant="contained" color="primary" onClick={handleSubmit} style={styles.button}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSubmit}
+        style={styles.button}
+      >
         Save Changes
       </Button>
     </ScrollView>
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
   },
   button: {
