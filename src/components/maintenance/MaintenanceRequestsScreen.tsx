@@ -1,39 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { TextField, Typography, Card, CardContent, Button } from '@mui/material';
-import { collection, addDoc, onSnapshot } from 'firebase/firestore';
-import { db } from '../../services/firebase';
+import React, { useState, useEffect } from "react";
+import { View, ScrollView, StyleSheet } from "react-native";
+import {
+  TextField,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+} from "@mui/material";
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { db, auth } from "../../services/firebase";
 
 const MaintenanceRequestsScreen = () => {
-  const [request, setRequest] = useState('');
+  const [request, setRequest] = useState("");
   const [maintenanceRequests, setMaintenanceRequests] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const fetchRequests = () => {
-      const unsubscribe = onSnapshot(collection(db, 'maintenanceRequests'), (snapshot) => {
-        const fetchedRequests = [];
-        snapshot.forEach((doc) => {
-          fetchedRequests.push({ ...doc.data(), id: doc.id });
-        });
-        setMaintenanceRequests(fetchedRequests);
-      });
-
-      return unsubscribe;
+    const fetchUser = () => {
+      const user = auth.currentUser;
+      if (user) {
+        setCurrentUser(user);
+      }
     };
 
-    const unsubscribe = fetchRequests();
-    return () => {
-      unsubscribe();
-    };
+    fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      const fetchRequests = () => {
+        const q = query(
+          collection(db, "maintenanceRequests"),
+          where("userId", "==", currentUser.uid)
+        );
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          const fetchedRequests = [];
+          snapshot.forEach((doc) => {
+            fetchedRequests.push({ ...doc.data(), id: doc.id });
+          });
+          setMaintenanceRequests(fetchedRequests);
+        });
+
+        return unsubscribe;
+      };
+
+      const unsubscribe = fetchRequests();
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [currentUser]);
 
   const handleAddRequest = async () => {
     try {
-      await addDoc(collection(db, 'maintenanceRequests'), { request });
-      setRequest('');
-      console.log('Maintenance request added successfully');
+      if (currentUser) {
+        await addDoc(collection(db, "maintenanceRequests"), {
+          request,
+          userId: currentUser.uid,
+          createdAt: new Date(),
+        });
+        setRequest("");
+        console.log("Maintenance request added successfully");
+      }
     } catch (error) {
-      console.error('Error adding maintenance request:', error);
+      console.error("Error adding maintenance request:", error);
     }
   };
 
@@ -50,7 +86,12 @@ const MaintenanceRequestsScreen = () => {
         margin="normal"
         variant="outlined"
       />
-      <Button variant="contained" color="primary" onClick={handleAddRequest} style={styles.button}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleAddRequest}
+        style={styles.button}
+      >
         Add Request
       </Button>
       <Typography variant="h6" component="h2" style={styles.sectionTitle}>
@@ -74,7 +115,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
   },
   sectionTitle: {
@@ -86,7 +127,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
-    width: '100%',
+    width: "100%",
   },
 });
 
