@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, ScrollView, Alert, Image } from "react-native";
 import {
   TextField,
@@ -10,20 +10,53 @@ import {
   FormControl,
   Avatar,
 } from "@mui/material";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db, storage } from "../../services/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
+import { AuthContext } from "../../context/AuthContext";
 
 const PropertyListingsScreen = ({ navigation }) => {
+  const { currentUser } = useContext(AuthContext);
   const [form, setForm] = useState({
     title: "",
     description: "",
     price: "",
+    location: "",
+    plotSize: "",
+    dateOfAvailability: "",
     type: "rent", // or 'sale'
     date: serverTimestamp(),
+    name: "",
+    phone: "",
   });
   const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setForm((prevForm) => ({
+            ...prevForm,
+            name: `${userData.firstName} ${userData.lastName}`,
+            phone: userData.phone,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [currentUser.uid]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,6 +94,7 @@ const PropertyListingsScreen = ({ navigation }) => {
         ...form,
         image: imageUrl,
         date: serverTimestamp(),
+        uid: currentUser.uid,
       };
       await addDoc(collection(db, "properties"), propertyData);
 
@@ -68,8 +102,13 @@ const PropertyListingsScreen = ({ navigation }) => {
         title: "",
         description: "",
         price: "",
+        location: "",
+        plotSize: "",
+        dateOfAvailability: "",
         type: "rent",
         date: serverTimestamp(),
+        name: `${currentUser.displayName}`,
+        phone: "",
       });
       setImage(null);
 
@@ -81,6 +120,9 @@ const PropertyListingsScreen = ({ navigation }) => {
           },
         ]);
       }, 100); // Adding a small timeout to ensure state is cleared first
+
+      // navigate to PropertyDetailsScreen
+      navigation.navigate("PropertyDetailsScreen");
     } catch (error) {
       console.error("Error adding property:", error);
       Alert.alert("Error", "Error adding property. Please try again.");
@@ -114,6 +156,33 @@ const PropertyListingsScreen = ({ navigation }) => {
         label="Price"
         name="price"
         value={form.price}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        label="Location"
+        name="location"
+        value={form.location}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        label="Plot Size"
+        name="plotSize"
+        value={form.plotSize}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        label="Date of Availability"
+        name="dateOfAvailability"
+        value={form.dateOfAvailability}
         onChange={handleChange}
         fullWidth
         margin="normal"

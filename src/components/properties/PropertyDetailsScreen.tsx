@@ -129,6 +129,15 @@ const PropertyDetailsScreen = ({ navigation }) => {
                   <Typography variant="body2" component="p">
                     {property.description}
                   </Typography>
+                  <Typography variant="body2" component="p">
+                    Location: {property.location}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    Plot Size: {property.plotSize}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    Date of Availability: {property.dateOfAvailability}
+                  </Typography>
                   {property.date && (
                     <Typography variant="body2" component="p">
                       Posted on:{" "}
@@ -141,6 +150,9 @@ const PropertyDetailsScreen = ({ navigation }) => {
                       ).toLocaleTimeString()}
                     </Typography>
                   )}
+                  <Typography variant="body2" component="p">
+                    Posted by: {property.name} ({property.phone})
+                  </Typography>
                 </TouchableOpacity>
                 {property.uid === currentUser.uid && (
                   <>
@@ -180,6 +192,15 @@ const PropertyDetailsScreen = ({ navigation }) => {
                   <Typography variant="body2" component="p">
                     {property.description}
                   </Typography>
+                  <Typography variant="body2" component="p">
+                    Location: {property.location}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    Plot Size: {property.plotSize}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    Date of Availability: {property.dateOfAvailability}
+                  </Typography>
                   {property.date && (
                     <Typography variant="body2" component="p">
                       Posted on:{" "}
@@ -192,6 +213,9 @@ const PropertyDetailsScreen = ({ navigation }) => {
                       ).toLocaleTimeString()}
                     </Typography>
                   )}
+                  <Typography variant="body2" component="p">
+                    Posted by: {property.name} ({property.phone})
+                  </Typography>
                 </TouchableOpacity>
                 {property.uid === currentUser.uid && (
                   <>
