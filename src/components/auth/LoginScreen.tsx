@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Alert } from "react-native";
 import {
   TextField,
   Button,
@@ -7,6 +7,7 @@ import {
   Link,
   IconButton,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { auth, db } from "../../services/firebase";
@@ -81,9 +82,10 @@ const LoginScreen = ({ navigation }) => {
       } else if (!userSnapshot.empty) {
         navigation.replace("Home");
       } else {
-        console.error("No such document!");
+        Alert.alert("Error", "No such document!");
       }
     } catch (error) {
+      Alert.alert("Error", "Incorrect email or password. Please try again.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -156,7 +158,7 @@ const LoginScreen = ({ navigation }) => {
         style={styles.button}
         disabled={loading}
       >
-        {loading ? "Logging in..." : "Login"}
+        {loading ? <CircularProgress color="inherit" size={24} /> : "Login"}
       </Button>
       <Link
         component="button"

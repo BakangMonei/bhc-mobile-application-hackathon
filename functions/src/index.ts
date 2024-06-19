@@ -20,7 +20,7 @@ export const sendEmailNotification = functions.firestore
       from: "bakangmonei2@gmail.com",
       to: data.email,
       subject: "Application Received",
-      text: `Hello ${data.username},\n
+      text: `Hello ${data.name},\n
       \nYour application for the 
       property ${data.propertyId} 
       has been received. 

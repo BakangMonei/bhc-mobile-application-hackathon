@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import { TextField, Button, Typography } from "@mui/material";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../services/firebase";
+import BottomNav from "../common/BottomNav";
 
 const ApplicationFormScreen = ({ route, navigation }) => {
   const { property } = route.params;
@@ -100,6 +101,8 @@ const ApplicationFormScreen = ({ route, navigation }) => {
       >
         Submit Application
       </Button>
+
+      <BottomNav />
     </ScrollView>
   );
 };

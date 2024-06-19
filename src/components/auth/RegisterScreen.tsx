@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { TextField, Button, Typography, Link, IconButton } from "@mui/material";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { auth, db } from "../../services/firebase";
@@ -94,8 +100,12 @@ const RegisterScreen = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
+        <Image
+          source={require("../../assets/images/bhc.png")}
+          style={styles.logo}
+        />
         <Typography variant="h4" component="h1" style={styles.title}>
-          Register
+          Create An Account
         </Typography>
         <TextField
           label="First Name"
@@ -271,6 +281,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 16,
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    alignSelf: "center",
+    marginBottom: 24,
   },
   title: {
     marginBottom: 24,

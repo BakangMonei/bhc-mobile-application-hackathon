@@ -17,7 +17,7 @@
   "dependencies": {
     "firebase-admin": "^12.1.0",
     "firebase-functions": "^5.0.0",
-    "nodemailer": "^6.9.13",
+    "nodemailer": "^6.9.14",
     "react-native-dotenv": "^3.4.11"
   },
   "devDependencies": {

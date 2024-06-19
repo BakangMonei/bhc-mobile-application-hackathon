@@ -17,15 +17,15 @@ const SuperAdminBottomNav = () => {
         tabBarIcon: ({ color, size }) => {
           let iconName;
 
-          if (route.name === "SuperAdminDashboard ") {
+          if (route.name === "Dashboard") {
             iconName = "home";
-          } else if (route.name === "SuperAdminAnalyticsScreen") {
+          } else if (route.name === "Analytics") {
             iconName = "location-city";
-          } else if (route.name === "SuperAdminContentManagementScreen") {
+          } else if (route.name === "Content Management") {
             iconName = "payment";
-          } else if (route.name === "SuperAdminSecurityManagementScreen") {
+          } else if (route.name === "Security Management") {
             iconName = "build";
-          } else if (route.name === "SuperAdminUserManagementScreen") {
+          } else if (route.name === "User Management") {
             iconName = "person";
           }
 
@@ -37,21 +37,21 @@ const SuperAdminBottomNav = () => {
         inactiveTintColor: "gray",
       }}
     >
-      <Tab.Screen name="SuperAdminDashboard " component={SuperAdminDashboard} />
+      <Tab.Screen name="Dashboard" component={SuperAdminDashboard} />
       <Tab.Screen
-        name="SuperAdminAnalyticsScreen"
+        name="Analytics"
         component={SuperAdminAnalyticsScreen}
       />
       <Tab.Screen
-        name="SuperAdminContentManagementScreen"
+        name="Content Management"
         component={SuperAdminContentManagementScreen}
       />
       <Tab.Screen
-        name="SuperAdminSecurityManagementScreen"
+        name="Security Management"
         component={SuperAdminSecurityManagementScreen}
       />
       <Tab.Screen
-        name="SuperAdminUserManagementScreen"
+        name="User Management"
         component={SuperAdminUserManagementScreen}
       />
     </Tab.Navigator>
