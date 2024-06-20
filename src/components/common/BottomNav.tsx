@@ -7,7 +7,6 @@ import MaintenanceRequestsScreen from "../maintenance/MaintenanceRequestsScreen"
 import PaymentsScreen from "../payments/PaymentsScreen";
 import PropertyDetailsScreen from "../properties/PropertyDetailsScreen";
 import ProfileScreen from "../profile/ProfileScreen";
-import ApplicationFormScreen from "../properties/ApplicationFormScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -47,11 +46,6 @@ const BottomNav = () => {
       <Tab.Screen name="Payments" component={PaymentsScreen} />
       <Tab.Screen name="Maintenance" component={MaintenanceRequestsScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
-      
-      {/* <Tab.Screen name="PropertyListingsScreen" component={PropertyListingsScreen} /> */}
-      {/*
-      <Tab.Screen name="Maintenance" component={MaintenanceRequestsScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} /> */}
     </Tab.Navigator>
   );
 };
