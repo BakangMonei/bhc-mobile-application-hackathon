@@ -20,7 +20,6 @@ const ChangePassword = ({ navigation }) => {
       await updatePassword(user, newPassword);
       alert("Password changed successfully");
       navigation.navigate("ChangePassword");
-
     } catch (error) {
       console.error("Error changing password:", error);
       alert("Error changing password. Please try again.");
