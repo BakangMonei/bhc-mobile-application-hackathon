@@ -5,14 +5,16 @@ import SplashScreen from "./components/auth/SplashScreen";
 import LoginScreen from "./components/auth/LoginScreen";
 import RegisterScreen from "./components/auth/RegisterScreen";
 import PropertyListingsScreen from "./components/properties/PropertyListingsScreen";
+import PropertyDetailsScreen from "./components/properties/PropertyDetailsScreen";
+import ApplicationFormScreen from "./components/properties/ApplicationFormScreen";
+import ProfileScreen from "./components/profile/ProfileScreen";
+import EditProfileScreen from "./components/profile/EditProfileScreen";
+import ChangePassword from "./components/profile/ChangePassword";
 import { AuthProvider } from "./context/AuthContext";
 import BottomNav from "./components/common/BottomNav";
 import SuperAdminDashboard from "./components/common/SuperAdminBottomNav";
 import AdminDashboard from "./components/common/AdminBottomNav";
 import AddUserForm from "./components/forms/AddUserForm";
-import PropertyDetailsScreen from "./components/properties/PropertyDetailsScreen";
-import ApplicationFormScreen from "./components/properties/ApplicationFormScreen";
-import ChangePassword from "./components/profile/ChangePassword";
 
 const Stack = createStackNavigator();
 
@@ -31,13 +33,6 @@ const App = () => {
             name="PropertyListingsScreen"
             component={PropertyListingsScreen}
           />
-          <Stack.Screen name="Home" component={BottomNav} />
-          <Stack.Screen
-            name="SuperAdminDashboard"
-            component={SuperAdminDashboard}
-          />
-          <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
-          <Stack.Screen name="AddUserForm" component={AddUserForm} />
           <Stack.Screen
             name="PropertyDetailsScreen"
             component={PropertyDetailsScreen}
@@ -46,7 +41,19 @@ const App = () => {
             name="ApplicationFormScreen"
             component={ApplicationFormScreen}
           />
+          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+          <Stack.Screen
+            name="EditProfileScreen"
+            component={EditProfileScreen}
+          />
           <Stack.Screen name="ChangePassword" component={ChangePassword} />
+          <Stack.Screen name="Home" component={BottomNav} />
+          <Stack.Screen
+            name="SuperAdminDashboard"
+            component={SuperAdminDashboard}
+          />
+          <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+          <Stack.Screen name="AddUserForm" component={AddUserForm} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

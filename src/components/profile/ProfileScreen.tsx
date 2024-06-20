@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet, Alert } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { TextField, Button, Typography, Divider } from "@mui/material";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -29,26 +29,15 @@ const ProfileScreen = ({ navigation }) => {
     fetchProfile();
   }, [currentUser]);
 
-  const handleChange = (e) => {
-    setProfile({
-      ...profile,
-      [e.target.name]: e.target.value,
-    });
-  };
+  useEffect(() => {
+    console.log("Profile data has changed:", profile);
+  }, [profile]);
 
-  const handleSubmit = async () => {
-    try {
-      const docRef = doc(db, "users", currentUser.uid);
-      await updateDoc(docRef, profile);
-      alert("Profile updated successfully");
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("Error updating profile. Please try again.");
-    }
+  const handleEditProfile = () => {
+    navigation.navigate("EditProfileScreen");
   };
 
   const handleChangePassword = () => {
-    // Add logic to navigate to Change Password Screen
     navigation.navigate("ChangePassword");
   };
 
@@ -57,61 +46,67 @@ const ProfileScreen = ({ navigation }) => {
       <Typography variant="h4" component="h1" style={styles.title}>
         My Profile
       </Typography>
-      <View style={styles.section}>
-        <Typography variant="h6" component="h2" style={styles.sectionTitle}>
-          Profile Information
-        </Typography>
-        <TextField
-          label="First Name"
-          name="firstName"
-          value={profile.firstName}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          variant="outlined"
-        />
-        <TextField
-          label="Last Name"
-          name="lastName"
-          value={profile.lastName}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          variant="outlined"
-        />
-        <TextField
-          label="Email"
-          name="email"
-          value={profile.email}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          variant="outlined"
-          disabled
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-          style={styles.button}
-        >
-          Update Profile
-        </Button>
-      </View>
       <Divider style={styles.divider} />
-      <View style={styles.section}>
-        <Typography variant="h6" component="h2" style={styles.sectionTitle}>
-          Settings
-        </Typography>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleChangePassword}
-          style={styles.button}
-        >
-          Change Password
-        </Button>
-      </View>
+      <Typography variant="h6" component="h2">
+        Profile Information
+      </Typography>
+      <TextField
+        label="First Name"
+        name="firstName"
+        value={profile.firstName}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+        disabled
+      />
+      <TextField
+        label="Last Name"
+        name="lastName"
+        value={profile.lastName}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+        disabled
+      />
+      <TextField
+        label="Email"
+        name="email"
+        value={profile.email}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+        disabled
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleEditProfile}
+        style={styles.button}
+      >
+        Edit Profile
+      </Button>
+      <Divider style={styles.divider} />
+      <Typography variant="h6" component="h2">
+        Password Settings
+      </Typography>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleChangePassword}
+        style={styles.button}
+      >
+        Change Password
+      </Button>
+      <Divider style={styles.divider} />
+      <Typography variant="h6" component="h2">
+        Other Settings
+      </Typography>
+      <Button variant="contained" color="secondary" style={styles.button}>
+        Other Setting 1
+      </Button>
+      <Button variant="contained" color="secondary" style={styles.button}>
+        Other Setting 2
+      </Button>
     </ScrollView>
   );
 };
@@ -124,18 +119,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 24,
   },
+  divider: {
+    marginVertical: 16,
+  },
   button: {
     marginTop: 16,
-  },
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-  },
-  divider: {
-    marginVertical: 24,
   },
 });
 
 export default ProfileScreen;
+ 

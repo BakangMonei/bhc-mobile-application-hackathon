@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { TextField, Button, Typography } from "@mui/material";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
@@ -28,6 +28,10 @@ const EditProfileScreen = ({ navigation }) => {
 
     fetchProfile();
   }, [currentUser]);
+
+  useEffect(() => {
+    console.log("Profile data has changed:", profile);
+  }, [profile]);
 
   const handleChange = (e) => {
     setProfile({
