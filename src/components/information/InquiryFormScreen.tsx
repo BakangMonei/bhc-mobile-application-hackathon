@@ -1,15 +1,47 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { TextField, Button, Typography } from '@mui/material';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../services/firebase';
+import React, { useState, useContext, useEffect } from "react";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { TextField, Button, Typography } from "@mui/material";
+import {
+  collection,
+  addDoc,
+  getDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "../../services/firebase";
+import { AuthContext } from "../../context/AuthContext";
 
-const InquiryFormScreen = () => {
+const InquiryFormScreen = ({ navigation }) => {
+  const { currentUser } = useContext(AuthContext);
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    inquiry: '',
+    firstName: "",
+    lastName: "",
+    email: currentUser ? currentUser.email : "",
+    inquiry: "",
+    date: serverTimestamp(),
   });
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (currentUser) {
+        try {
+          const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setForm((prevForm) => ({
+              ...prevForm,
+              firstName: userData.firstName || "",
+              lastName: userData.lastName || "",
+            }));
+          }
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      }
+    };
+
+    fetchUserDetails();
+  }, [currentUser]);
 
   const handleChange = (e) => {
     setForm({
@@ -20,11 +52,18 @@ const InquiryFormScreen = () => {
 
   const handleSubmit = async () => {
     try {
-      await addDoc(collection(db, 'inquiries'), form);
-      setForm({ name: '', email: '', inquiry: '' });
-      console.log('Inquiry submitted successfully');
+      await addDoc(collection(db, "inquiries"), form);
+      setForm({
+        firstName: "",
+        lastName: "",
+        email: currentUser ? currentUser.email : "",
+        inquiry: "",
+        date: serverTimestamp(),
+      });
+      console.log("Inquiry submitted successfully");
+      navigation.goBack();
     } catch (error) {
-      console.error('Error submitting inquiry:', error);
+      console.error("Error submitting inquiry:", error);
     }
   };
 
@@ -34,13 +73,24 @@ const InquiryFormScreen = () => {
         Submit an Inquiry
       </Typography>
       <TextField
-        label="Name"
-        name="name"
-        value={form.name}
+        label="First Name"
+        name="firstName"
+        value={form.firstName}
         onChange={handleChange}
         fullWidth
         margin="normal"
         variant="outlined"
+        disabled
+      />
+      <TextField
+        label="Last Name"
+        name="lastName"
+        value={form.lastName}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+        disabled
       />
       <TextField
         label="Email"
@@ -50,6 +100,7 @@ const InquiryFormScreen = () => {
         fullWidth
         margin="normal"
         variant="outlined"
+        disabled
       />
       <TextField
         label="Inquiry"
@@ -62,7 +113,12 @@ const InquiryFormScreen = () => {
         multiline
         rows={4}
       />
-      <Button variant="contained" color="primary" onClick={handleSubmit} style={styles.button}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSubmit}
+        style={styles.button}
+      >
         Submit
       </Button>
     </ScrollView>
@@ -74,11 +130,12 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
   },
   button: {
     marginTop: 16,
+    width: "100%",
   },
 });
 

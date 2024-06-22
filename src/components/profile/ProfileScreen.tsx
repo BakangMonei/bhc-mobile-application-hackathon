@@ -41,6 +41,10 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate("ChangePassword");
   };
 
+  const handleGoToDAQ = () => {
+    navigation.navigate("InformationCenterScreen");
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Typography variant="h4" component="h1" style={styles.title}>
@@ -101,7 +105,12 @@ const ProfileScreen = ({ navigation }) => {
       <Typography variant="h6" component="h2">
         Other Settings
       </Typography>
-      <Button variant="contained" color="secondary" style={styles.button}>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleGoToDAQ}
+        style={styles.button}
+      >
         Other Setting 1
       </Button>
       <Button variant="contained" color="secondary" style={styles.button}>
@@ -128,4 +137,3 @@ const styles = StyleSheet.create({
 });
 
 export default ProfileScreen;
- 
