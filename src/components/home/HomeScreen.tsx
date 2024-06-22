@@ -3,16 +3,10 @@ import { View, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
 import { Card, CardContent, Typography, Button } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import { AuthContext } from "../../context/AuthContext";
-import {
-  doc,
-  getDoc,
-  collection,
-  getDocs,
-  onSnapshot,
-} from "firebase/firestore";
+import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../services/firebase";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,15 +14,15 @@ const HomeScreen = () => {
   const [carouselItems, setCarouselItems] = useState([
     {
       title: "Report Maintenance Issue",
-      action: () => console.log("Report Maintenance Issue"),
+      action: () => navigation.navigate("MaintenanceRequestsScreen"),
     },
     {
       title: "View Properties",
-      action: () => console.log("View Properties"),
+      action: () => navigation.navigate("PropertyListingsScreen"),
     },
     {
       title: "Make a Payment",
-      action: () => console.log("Make a Payment"),
+      action: () => navigation.navigate("PaymentsScreen"),
     },
   ]);
 
@@ -133,7 +127,12 @@ const HomeScreen = () => {
           <Typography variant="body2" component="p">
             Manage your account settings and preferences.
           </Typography>
-          <Button variant="contained" color="secondary" style={styles.button}>
+          <Button
+            variant="contained"
+            color="secondary"
+            style={styles.button}
+            onClick={() => navigation.navigate("Profile")}
+          >
             Go to Profile
           </Button>
         </CardContent>
@@ -145,18 +144,32 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "#f5f5f5",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
+    color: "#3f51b5",
   },
   sectionTitle: {
     marginBottom: 16,
+    color: "#3f51b5",
   },
   card: {
     marginBottom: 16,
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   button: {
+    marginTop: 8,
     width: "100%",
   },
   loadingContainer: {
