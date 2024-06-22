@@ -1,17 +1,33 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import HomeScreen from "../home/HomeScreen";
 import MaintenanceRequestsScreen from "../maintenance/MaintenanceRequestsScreen";
 import PaymentsScreen from "../payments/PaymentsScreen";
 import PropertyDetailsScreen from "../properties/PropertyDetailsScreen";
 import ProfileScreen from "../profile/ProfileScreen";
+import PropertyListingsScreen from "../properties/PropertyListingsScreen"; // Import PropertyListingsScreen
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const PropertyStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="PropertyDetailsScreen"
+        component={PropertyDetailsScreen}
+      />
+      <Stack.Screen
+        name="PropertyListingsScreen"
+        component={PropertyListingsScreen}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const BottomNav = () => {
-  // screenOptions={{ headerShown: false }}
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -29,9 +45,6 @@ const BottomNav = () => {
           } else if (route.name === "Profile") {
             iconName = "person";
           }
-          // else if (route.name === 'Profile') {
-          //   iconName = 'person';
-          // }
 
           return <Icon name={iconName} size={size} color={color} />;
         },
@@ -42,7 +55,7 @@ const BottomNav = () => {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Properties" component={PropertyDetailsScreen} />
+      <Tab.Screen name="Properties" component={PropertyStackNavigator} />
       <Tab.Screen name="Payments" component={PaymentsScreen} />
       <Tab.Screen name="Maintenance" component={MaintenanceRequestsScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />

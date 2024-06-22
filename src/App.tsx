@@ -4,7 +4,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SplashScreen from "./components/auth/SplashScreen";
 import LoginScreen from "./components/auth/LoginScreen";
 import RegisterScreen from "./components/auth/RegisterScreen";
-import PropertyListingsScreen from "./components/properties/PropertyListingsScreen";
 import PropertyDetailsScreen from "./components/properties/PropertyDetailsScreen";
 import ApplicationFormScreen from "./components/properties/ApplicationFormScreen";
 import ProfileScreen from "./components/profile/ProfileScreen";
@@ -31,10 +30,7 @@ const App = () => {
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen
-            name="PropertyListingsScreen"
-            component={PropertyListingsScreen}
-          />
+
           <Stack.Screen
             name="PropertyDetailsScreen"
             component={PropertyDetailsScreen}

@@ -107,7 +107,7 @@ const PropertyListingsScreen = ({ navigation }) => {
         dateOfAvailability: "",
         type: "rent",
         date: serverTimestamp(),
-        name: `${currentUser.displayName}`,
+        name: "",
         phone: "",
       });
       setImage(null);
@@ -121,7 +121,6 @@ const PropertyListingsScreen = ({ navigation }) => {
         ]);
       }, 100); // Adding a small timeout to ensure state is cleared first
 
-      // navigate to PropertyDetailsScreen
       navigation.navigate("PropertyDetailsScreen");
     } catch (error) {
       console.error("Error adding property:", error);
