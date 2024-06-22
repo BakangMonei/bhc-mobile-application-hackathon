@@ -11,6 +11,8 @@ import PropertyListingsScreen from "../properties/PropertyListingsScreen"; // Im
 import EditProfileScreen from "../profile/EditProfileScreen";
 import ChangePassword from "../profile/ChangePassword";
 import ApplicationFormScreen from "../properties/ApplicationFormScreen";
+import InformationCenterScreen from "../information/InformationCenterScreen";
+import InquiryFormScreen from "../information/InquiryFormScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -29,6 +31,21 @@ const PropertyStackNavigator = () => {
       <Stack.Screen
         name="ApplicationFormScreen"
         component={ApplicationFormScreen}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const FAQStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="InformationCenterScreen"
+        component={InformationCenterScreen}
+      />
+      <Stack.Screen
+        name="InquiryFormScreen"
+        component={InquiryFormScreen}
       />
     </Stack.Navigator>
   );
