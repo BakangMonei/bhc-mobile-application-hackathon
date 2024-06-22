@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { Typography, Card, CardContent } from '@mui/material';
+import React from "react";
+import { ScrollView, StyleSheet, Image } from "react-native";
+import { Typography, Card, CardContent } from "@mui/material";
 
 const MaintenanceDetailScreen = ({ route }) => {
   const { requestId, requestDetails } = route.params;
@@ -16,8 +16,20 @@ const MaintenanceDetailScreen = ({ route }) => {
             Request ID: {requestId}
           </Typography>
           <Typography variant="body2" component="p">
-            {requestDetails}
+            {requestDetails.request}
           </Typography>
+          <Typography variant="body2" component="p">
+            Status: {requestDetails.status}
+          </Typography>
+          <Typography variant="body2" component="p">
+            Description: {requestDetails.description}
+          </Typography>
+          {requestDetails.image && (
+            <Image
+              source={{ uri: requestDetails.image }}
+              style={styles.image}
+            />
+          )}
         </CardContent>
       </Card>
     </ScrollView>
@@ -29,11 +41,17 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
   },
   card: {
     marginBottom: 16,
+  },
+  image: {
+    width: "100%",
+    height: 300,
+    objectFit: "cover",
+    marginTop: 8,
   },
 });
 

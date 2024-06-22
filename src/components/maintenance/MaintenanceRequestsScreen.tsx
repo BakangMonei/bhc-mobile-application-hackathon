@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, ScrollView, StyleSheet, Image, Alert } from "react-native";
 import {
   TextField,
   Typography,
   Card,
   CardContent,
   Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import {
   collection,
@@ -13,63 +17,80 @@ import {
   onSnapshot,
   query,
   where,
+  serverTimestamp,
 } from "firebase/firestore";
-import { db, auth } from "../../services/firebase";
+import { db, auth, storage } from "../../services/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import * as ImagePicker from "expo-image-picker";
+import { AuthContext } from "../../context/AuthContext";
 
-const MaintenanceRequestsScreen = () => {
+const MaintenanceRequestsScreen = ({ navigation }) => {
+  const { currentUser } = useContext(AuthContext);
   const [request, setRequest] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("Pending");
+  const [image, setImage] = useState(null);
   const [maintenanceRequests, setMaintenanceRequests] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = () => {
-      const user = auth.currentUser;
-      if (user) {
-        setCurrentUser(user);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   useEffect(() => {
     if (currentUser) {
-      const fetchRequests = () => {
-        const q = query(
-          collection(db, "maintenanceRequests"),
-          where("userId", "==", currentUser.uid)
-        );
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-          const fetchedRequests = [];
-          snapshot.forEach((doc) => {
-            fetchedRequests.push({ ...doc.data(), id: doc.id });
-          });
-          setMaintenanceRequests(fetchedRequests);
+      const q = query(
+        collection(db, "maintenanceRequests"),
+        where("userId", "==", currentUser.uid)
+      );
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const fetchedRequests = [];
+        snapshot.forEach((doc) => {
+          fetchedRequests.push({ ...doc.data(), id: doc.id });
         });
+        setMaintenanceRequests(fetchedRequests);
+      });
 
-        return unsubscribe;
-      };
-
-      const unsubscribe = fetchRequests();
-      return () => {
-        unsubscribe();
-      };
+      return () => unsubscribe();
     }
   }, [currentUser]);
 
   const handleAddRequest = async () => {
     try {
       if (currentUser) {
+        let imageUrl = "";
+        if (image) {
+          const response = await fetch(image);
+          const blob = await response.blob();
+          const storageRef = ref(storage, `maintenanceImages/${Date.now()}`);
+          const snapshot = await uploadBytes(storageRef, blob);
+          imageUrl = await getDownloadURL(snapshot.ref);
+        }
+
         await addDoc(collection(db, "maintenanceRequests"), {
           request,
+          description,
+          status,
+          image: imageUrl,
           userId: currentUser.uid,
-          createdAt: new Date(),
+          createdAt: serverTimestamp(),
         });
         setRequest("");
+        setDescription("");
+        setImage(null);
+        setStatus("Pending");
         console.log("Maintenance request added successfully");
       }
     } catch (error) {
       console.error("Error adding maintenance request:", error);
+    }
+  };
+
+  const handleImagePick = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    } else {
+      Alert.alert("You did not select any image.");
     }
   };
 
@@ -86,6 +107,50 @@ const MaintenanceRequestsScreen = () => {
         margin="normal"
         variant="outlined"
       />
+      <TextField
+        label="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        fullWidth
+        margin="normal"
+        variant="outlined"
+        multiline
+        rows={4}
+      />
+      <FormControl fullWidth margin="normal" variant="outlined">
+        <InputLabel>Status</InputLabel>
+        <Select
+          label="Status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <MenuItem value="Pending">Pending</MenuItem>
+          <MenuItem value="In Progress">In Progress</MenuItem>
+          <MenuItem value="Completed">Completed</MenuItem>
+        </Select>
+      </FormControl>
+      <View style={styles.imageContainer}>
+        {image ? (
+          <Image source={{ uri: image }} style={styles.image} />
+        ) : (
+          <Button
+            variant="outlined"
+            onClick={handleImagePick}
+            style={styles.button}
+          >
+            Upload Image
+          </Button>
+        )}
+        {image && (
+          <Button
+            variant="outlined"
+            onClick={() => setImage(null)}
+            style={styles.button}
+          >
+            Remove Image
+          </Button>
+        )}
+      </View>
       <Button
         variant="contained"
         color="primary"
@@ -98,11 +163,29 @@ const MaintenanceRequestsScreen = () => {
         Existing Requests
       </Typography>
       {maintenanceRequests.map((req) => (
-        <Card key={req.id} style={styles.card}>
+        <Card
+          key={req.id}
+          style={styles.card}
+          onClick={() =>
+            navigation.navigate("MaintenanceDetailScreen", {
+              requestId: req.id,
+              requestDetails: req,
+            })
+          }
+        >
           <CardContent>
             <Typography variant="body2" component="p">
               {req.request}
             </Typography>
+            <Typography variant="body2" component="p">
+              Status: {req.status}
+            </Typography>
+            <Typography variant="body2" component="p">
+              Description: {req.description}
+            </Typography>
+            {req.image && (
+              <Image source={{ uri: req.image }} style={styles.cardImage} />
+            )}
           </CardContent>
         </Card>
       ))}
@@ -128,6 +211,22 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     width: "100%",
+  },
+  imageContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginRight: 16,
+  },
+  cardImage: {
+    width: "100%",
+    height: 150,
+    objectFit: "cover",
+    marginTop: 8,
   },
 });
 
