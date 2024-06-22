@@ -8,6 +8,8 @@ import PaymentsScreen from "../payments/PaymentsScreen";
 import PropertyDetailsScreen from "../properties/PropertyDetailsScreen";
 import ProfileScreen from "../profile/ProfileScreen";
 import PropertyListingsScreen from "../properties/PropertyListingsScreen"; // Import PropertyListingsScreen
+import EditProfileScreen from "../profile/EditProfileScreen";
+import ChangePassword from "../profile/ChangePassword";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,6 +25,16 @@ const PropertyStackNavigator = () => {
         name="PropertyListingsScreen"
         component={PropertyListingsScreen}
       />
+    </Stack.Navigator>
+  );
+};
+
+const ProfileStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
 };
@@ -58,7 +70,7 @@ const BottomNav = () => {
       <Tab.Screen name="Properties" component={PropertyStackNavigator} />
       <Tab.Screen name="Payments" component={PaymentsScreen} />
       <Tab.Screen name="Maintenance" component={MaintenanceRequestsScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
     </Tab.Navigator>
   );
 };

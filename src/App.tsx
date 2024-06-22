@@ -7,8 +7,7 @@ import RegisterScreen from "./components/auth/RegisterScreen";
 import PropertyDetailsScreen from "./components/properties/PropertyDetailsScreen";
 import ApplicationFormScreen from "./components/properties/ApplicationFormScreen";
 import ProfileScreen from "./components/profile/ProfileScreen";
-import EditProfileScreen from "./components/profile/EditProfileScreen";
-import ChangePassword from "./components/profile/ChangePassword";
+
 import { AuthProvider } from "./context/AuthContext";
 import BottomNav from "./components/common/BottomNav";
 import SuperAdminDashboard from "./components/common/SuperAdminBottomNav";
@@ -39,12 +38,7 @@ const App = () => {
             name="ApplicationFormScreen"
             component={ApplicationFormScreen}
           />
-          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-          <Stack.Screen
-            name="EditProfileScreen"
-            component={EditProfileScreen}
-          />
-          <Stack.Screen name="ChangePassword" component={ChangePassword} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Home" component={BottomNav} />
           <Stack.Screen
             name="SuperAdminDashboard"
