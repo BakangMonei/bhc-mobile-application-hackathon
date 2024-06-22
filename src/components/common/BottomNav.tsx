@@ -10,6 +10,7 @@ import ProfileScreen from "../profile/ProfileScreen";
 import PropertyListingsScreen from "../properties/PropertyListingsScreen"; // Import PropertyListingsScreen
 import EditProfileScreen from "../profile/EditProfileScreen";
 import ChangePassword from "../profile/ChangePassword";
+import ApplicationFormScreen from "../properties/ApplicationFormScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -24,6 +25,10 @@ const PropertyStackNavigator = () => {
       <Stack.Screen
         name="PropertyListingsScreen"
         component={PropertyListingsScreen}
+      />
+      <Stack.Screen
+        name="ApplicationFormScreen"
+        component={ApplicationFormScreen}
       />
     </Stack.Navigator>
   );

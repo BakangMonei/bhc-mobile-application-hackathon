@@ -5,7 +5,6 @@ import SplashScreen from "./components/auth/SplashScreen";
 import LoginScreen from "./components/auth/LoginScreen";
 import RegisterScreen from "./components/auth/RegisterScreen";
 import PropertyDetailsScreen from "./components/properties/PropertyDetailsScreen";
-import ApplicationFormScreen from "./components/properties/ApplicationFormScreen";
 import ProfileScreen from "./components/profile/ProfileScreen";
 
 import { AuthProvider } from "./context/AuthContext";
@@ -33,10 +32,6 @@ const App = () => {
           <Stack.Screen
             name="PropertyDetailsScreen"
             component={PropertyDetailsScreen}
-          />
-          <Stack.Screen
-            name="ApplicationFormScreen"
-            component={ApplicationFormScreen}
           />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Home" component={BottomNav} />

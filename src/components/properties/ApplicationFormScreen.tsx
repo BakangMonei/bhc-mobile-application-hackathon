@@ -102,7 +102,6 @@ const ApplicationFormScreen = ({ route, navigation }) => {
         Submit Application
       </Button>
 
-      <BottomNav />
     </ScrollView>
   );
 };
