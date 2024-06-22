@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { TextField, Button, Typography, Divider } from "@mui/material";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../services/firebase";
+import { db, auth } from "../../services/firebase";
 import { AuthContext } from "../../context/AuthContext";
 
 const ProfileScreen = ({ navigation }) => {
@@ -41,8 +41,15 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate("ChangePassword");
   };
 
-  const handleGoToDAQ = () => {
-    navigation.navigate("InformationCenterScreen");
+  const handleLogout = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Login");
+      })
+      .catch((error) => {
+        console.error("Error logging out:", error);
+      });
   };
 
   return (
@@ -105,16 +112,23 @@ const ProfileScreen = ({ navigation }) => {
       <Typography variant="h6" component="h2">
         Other Settings
       </Typography>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={handleGoToDAQ}
-        style={styles.button}
-      >
+      <Button variant="contained" color="secondary" style={styles.button}>
         Other Setting 1
       </Button>
       <Button variant="contained" color="secondary" style={styles.button}>
         Other Setting 2
+      </Button>
+      <Divider style={styles.divider} />
+      <Typography variant="h6" component="h2">
+        Logout
+      </Typography>
+      <Button
+        variant="contained"
+        color="error"
+        onClick={handleLogout}
+        style={styles.button}
+      >
+        Logout
       </Button>
     </ScrollView>
   );
@@ -123,16 +137,19 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "#f5f5f5",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
+    color: "#3f51b5",
   },
   divider: {
     marginVertical: 16,
   },
   button: {
     marginTop: 16,
+    width: "100%",
   },
 });
 
