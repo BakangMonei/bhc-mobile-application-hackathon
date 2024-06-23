@@ -24,6 +24,10 @@ const HomeScreen = ({ navigation }) => {
       title: "Make a Payment",
       action: () => navigation.navigate("PaymentsScreen"),
     },
+    {
+      title: "FAQs",
+      action: () => navigation.navigate("FAQStackNavigator"),
+    },
   ]);
 
   useEffect(() => {

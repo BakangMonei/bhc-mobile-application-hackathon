@@ -39,10 +39,7 @@ const PropertyStackNavigator = () => {
 const FAQStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="InformationCenterScreen"
-        component={InformationCenterScreen}
-      />
+      <Stack.Screen name="InformationCenterScreen" component={InformationCenterScreen}/>
       <Stack.Screen name="InquiryFormScreen" component={InquiryFormScreen} />
     </Stack.Navigator>
   );
