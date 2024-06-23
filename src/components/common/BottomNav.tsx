@@ -7,7 +7,7 @@ import MaintenanceRequestsScreen from "../maintenance/MaintenanceRequestsScreen"
 import PaymentsScreen from "../payments/PaymentsScreen";
 import PropertyDetailsScreen from "../properties/PropertyDetailsScreen";
 import ProfileScreen from "../profile/ProfileScreen";
-import PropertyListingsScreen from "../properties/PropertyListingsScreen"; // Import PropertyListingsScreen
+import PropertyListingsScreen from "../properties/PropertyListingsScreen";
 import EditProfileScreen from "../profile/EditProfileScreen";
 import ChangePassword from "../profile/ChangePassword";
 import ApplicationFormScreen from "../properties/ApplicationFormScreen";
@@ -43,10 +43,7 @@ const FAQStackNavigator = () => {
         name="InformationCenterScreen"
         component={InformationCenterScreen}
       />
-      <Stack.Screen
-        name="InquiryFormScreen"
-        component={InquiryFormScreen}
-      />
+      <Stack.Screen name="InquiryFormScreen" component={InquiryFormScreen} />
     </Stack.Navigator>
   );
 };
@@ -67,7 +64,6 @@ const BottomNav = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName;
-
           if (route.name === "Home") {
             iconName = "home";
           } else if (route.name === "Properties") {
