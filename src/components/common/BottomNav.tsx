@@ -80,8 +80,8 @@ const BottomNav = () => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: "tomato",
-        inactiveTintColor: "gray",
+        activeTintColor: "red",
+        inactiveTintColor: "black",
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />

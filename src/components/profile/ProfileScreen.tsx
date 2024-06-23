@@ -41,6 +41,7 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate("ChangePassword");
   };
 
+  
   const handleLogout = () => {
     auth
       .signOut()
