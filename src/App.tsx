@@ -6,7 +6,6 @@ import LoginScreen from "./components/auth/LoginScreen";
 import RegisterScreen from "./components/auth/RegisterScreen";
 import PropertyDetailsScreen from "./components/properties/PropertyDetailsScreen";
 import ProfileScreen from "./components/profile/ProfileScreen";
-
 import { AuthProvider } from "./context/AuthContext";
 import BottomNav from "./components/common/BottomNav";
 import SuperAdminDashboard from "./components/common/SuperAdminBottomNav";
@@ -14,10 +13,11 @@ import AdminDashboard from "./components/common/AdminBottomNav";
 import AddUserForm from "./components/forms/AddUserForm";
 import InformationCenterScreen from "./components/information/InformationCenterScreen";
 import InquiryFormScreen from "./components/information/InquiryFormScreen";
+import FAQStackNavigator from "./navigation/FAQStackNavigator"; // Import the FAQStackNavigator
 
 const Stack = createStackNavigator();
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <AuthProvider>
       <NavigationContainer>
@@ -28,7 +28,6 @@ const App = () => {
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
-
           <Stack.Screen
             name="PropertyDetailsScreen"
             component={PropertyDetailsScreen}
@@ -42,12 +41,8 @@ const App = () => {
           <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
           <Stack.Screen name="AddUserForm" component={AddUserForm} />
           <Stack.Screen
-            name="InformationCenterScreen"
-            component={InformationCenterScreen}
-          />
-          <Stack.Screen
-            name="InquiryFormScreen"
-            component={InquiryFormScreen}
+            name="FAQStackNavigator"
+            component={FAQStackNavigator}
           />
         </Stack.Navigator>
       </NavigationContainer>

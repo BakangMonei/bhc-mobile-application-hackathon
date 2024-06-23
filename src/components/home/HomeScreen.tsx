@@ -119,6 +119,10 @@ const HomeScreen = ({ navigation }) => {
           </Card>
         ))}
       </Carousel>
+
+      <Typography variant="h6" component="h2" style={styles.sectionTitle}>
+        Quick Actions
+      </Typography>
       <Card style={styles.card}>
         <CardContent>
           <Typography variant="h6" component="h2">
