@@ -1,108 +1,24 @@
 import React from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { Typography, Card, CardContent, Grid } from "@mui/material";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import SuperAdminContentManagementScreen from "./SuperAdminContentManagementScreen";
+import SuperAdminAnalyticsScreen from "./SuperAdminAnalyticsScreen";
+import SuperAdminUserManagementScreen from "./SuperAdminUserManagementScreen";
+import SuperAdminSecurityManagementScreen from "./SuperAdminSecurityManagementScreen";
+import SuperAdminMaintenanceOversightScreen from "./SuperAdminMaintenanceOversightScreen";
+import CustomDrawerContent from "../../components/drawers/CustomDrawerContent";
 
-const SuperAdminDashboard = ({ navigation }) => {
+const Drawer = createDrawerNavigator();
+
+const SuperAdminDashboard = () => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
-        SuperAdmin Dashboard
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Card style={styles.card}>
-            <CardContent>
-              <Typography variant="h6" component="h2">
-                User Activity
-              </Typography>
-              <Typography variant="body2" component="p">
-                Overview of user activity...
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card style={styles.card}>
-            <CardContent>
-              <Typography variant="h6" component="h2">
-                Property Applications
-              </Typography>
-              <Typography variant="body2" component="p">
-                Overview of property applications...
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card style={styles.card}>
-            <CardContent>
-              <Typography variant="h6" component="h2">
-                Payments
-              </Typography>
-              <Typography variant="body2" component="p">
-                Overview of payments...
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card style={styles.card}>
-            <CardContent>
-              <Typography variant="h6" component="h2">
-                Maintenance Requests
-              </Typography>
-              <Typography variant="body2" component="p">
-                Overview of maintenance requests...
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TouchableOpacity onPress={() => navigation.navigate("AddUserForm")}>
-            <Card style={styles.card}>
-              <CardContent>
-                <Typography variant="h6" component="h2">
-                  Create New Users
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Create a new user
-                </Typography>
-              </CardContent>
-            </Card>
-          </TouchableOpacity>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("SomeOtherScreen")}
-          >
-            <Card style={styles.card}>
-              <CardContent>
-                <Typography variant="h6" component="h2">
-                  xxxxxxxxxxxxxxxxx
-                </Typography>
-                <Typography variant="body2" component="p">
-                  xxxxxxxxxxxxxxxxx
-                </Typography>
-              </CardContent>
-            </Card>
-          </TouchableOpacity>
-        </Grid>
-      </Grid>
-    </ScrollView>
+    <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
+      <Drawer.Screen name="User Management" component={SuperAdminUserManagementScreen} />
+      <Drawer.Screen name="Content Management" component={SuperAdminContentManagementScreen} />
+      <Drawer.Screen name="Analytics Reporting" component={SuperAdminAnalyticsScreen} />
+      <Drawer.Screen name="Security Management" component={SuperAdminSecurityManagementScreen} />
+      <Drawer.Screen name="Maintenance Oversight" component={SuperAdminMaintenanceOversightScreen} />
+    </Drawer.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-  title: {
-    textAlign: "center",
-    marginBottom: 24,
-  },
-  card: {
-    marginBottom: 16,
-  },
-});
 
 export default SuperAdminDashboard;

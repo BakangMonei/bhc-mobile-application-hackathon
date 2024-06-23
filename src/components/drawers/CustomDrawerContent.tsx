@@ -1,36 +1,42 @@
 import React, { useContext } from "react";
-import { DrawerContentScrollView, DrawerItemList, DrawerItem } from "@react-navigation/drawer";
-import { View, StyleSheet, Text } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import { Avatar } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
+import { Avatar, Button, Drawer, Typography } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 
-const CustomDrawerContent: React.FC<any> = (props) => {
+const CustomDrawerContent = (props) => {
   const { currentUser } = useContext(AuthContext);
+
+  const logout = () => {
+    // Implement logout functionality
+    console.log("User logged out");
+  };
 
   return (
     <DrawerContentScrollView {...props}>
-      <View style={styles.drawerHeader}>
-        <Avatar.Icon size={50} icon="account" />
-        <Text>{currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : "Guest"}</Text>
+      <View style={styles.profileContainer}>
+        <Avatar style={styles.avatar} />
+        <Typography variant="h6">{currentUser?.displayName}</Typography>
+        <Typography variant="subtitle1">{currentUser?.email}</Typography>
       </View>
       <DrawerItemList {...props} />
-      <DrawerItem
-        label="Logout"
-        onPress={() => console.log("Logout pressed")}
-        icon={({ color, size }) => (
-          <Icon name="logout" color={color} size={size} />
-        )}
-      />
+      <Button variant="contained" color="secondary" onClick={logout} style={styles.logoutButton}>
+        Logout
+      </Button>
     </DrawerContentScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  drawerHeader: {
+  profileContainer: {
     padding: 16,
-    flexDirection: "row",
     alignItems: "center",
+  },
+  avatar: {
+    marginBottom: 16,
+  },
+  logoutButton: {
+    marginTop: 16,
   },
 });
 

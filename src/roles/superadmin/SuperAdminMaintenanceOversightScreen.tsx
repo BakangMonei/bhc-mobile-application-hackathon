@@ -2,43 +2,60 @@ import React from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { Typography, Card, CardContent, Button } from "@mui/material";
 
-const SuperAdminContentManagementScreen = () => {
+const SuperAdminMaintenanceOversightScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Typography variant="h4" component="h1" style={styles.title}>
-        Content Management
+        Maintenance Oversight
       </Typography>
       <Card style={styles.card}>
         <CardContent>
           <Typography variant="h6" component="h2">
-            Approve Content
+            Manage Requests
           </Typography>
           <Typography variant="body2" component="p">
-            Review and approve content submitted by admins.
+            View and manage all maintenance requests.
           </Typography>
           <Button
             variant="contained"
             color="primary"
             style={styles.button}
           >
-            Approve Content
+            Manage Requests
           </Button>
         </CardContent>
       </Card>
       <Card style={styles.card}>
         <CardContent>
           <Typography variant="h6" component="h2">
-            Manage Settings
+            Delegate Tasks
           </Typography>
           <Typography variant="body2" component="p">
-            Configure app settings and manage configurations.
+            Delegate tasks to admins or specific teams.
           </Typography>
           <Button
             variant="contained"
             color="primary"
             style={styles.button}
           >
-            Manage Settings
+            Delegate Tasks
+          </Button>
+        </CardContent>
+      </Card>
+      <Card style={styles.card}>
+        <CardContent>
+          <Typography variant="h6" component="h2">
+            Track Status
+          </Typography>
+          <Typography variant="body2" component="p">
+            Track maintenance status and ensure timely resolution.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            style={styles.button}
+          >
+            Track Status
           </Button>
         </CardContent>
       </Card>
@@ -63,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SuperAdminContentManagementScreen;
+export default SuperAdminMaintenanceOversightScreen;

@@ -8,15 +8,26 @@ import PropertyDetailsScreen from "./components/properties/PropertyDetailsScreen
 import ProfileScreen from "./components/profile/ProfileScreen";
 import { AuthProvider } from "./context/AuthContext";
 import BottomNav from "./components/common/BottomNav";
-import SuperAdminDashboard from "./components/common/SuperAdminBottomNav";
+// import SuperAdminDashboard from "./components/common/SuperAdminBottomNav";
+import SuperAdminDashboard from "./roles/superadmin/SuperAdminDashboard";
 import AdminDashboard from "./components/common/AdminBottomNav";
 import AddUserForm from "./components/forms/AddUserForm";
 import InformationCenterScreen from "./components/information/InformationCenterScreen";
 import InquiryFormScreen from "./components/information/InquiryFormScreen";
-import FAQStackNavigator from "./navigation/FAQStackNavigator"; // Import the FAQStackNavigator
 
 const Stack = createStackNavigator();
 
+const FAQStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="InformationCenterScreen"
+        component={InformationCenterScreen}
+      />
+      <Stack.Screen name="InquiryFormScreen" component={InquiryFormScreen} />
+    </Stack.Navigator>
+  );
+};
 const App: React.FC = () => {
   return (
     <AuthProvider>

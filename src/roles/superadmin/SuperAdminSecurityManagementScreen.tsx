@@ -1,18 +1,8 @@
-import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { Typography, Card, CardContent, Button } from '@mui/material';
+import React from "react";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { Typography, Card, CardContent, Button } from "@mui/material";
 
 const SuperAdminSecurityManagementScreen = () => {
-  const handleAudit = () => {
-    // Handle security audit logic
-    console.log('Security audit conducted');
-  };
-
-  const handleUpdateProtocols = () => {
-    // Handle updating security protocols logic
-    console.log('Security protocols updated');
-  };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Typography variant="h4" component="h1" style={styles.title}>
@@ -21,10 +11,34 @@ const SuperAdminSecurityManagementScreen = () => {
       <Card style={styles.card}>
         <CardContent>
           <Typography variant="h6" component="h2">
-            Conduct Security Audit
+            Conduct Audits
           </Typography>
-          <Button variant="contained" color="primary" onClick={handleAudit} style={styles.button}>
+          <Typography variant="body2" component="p">
+            Conduct and review security audits.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            style={styles.button}
+          >
             Conduct Audit
+          </Button>
+        </CardContent>
+      </Card>
+      <Card style={styles.card}>
+        <CardContent>
+          <Typography variant="h6" component="h2">
+            Manage Permissions
+          </Typography>
+          <Typography variant="body2" component="p">
+            Manage permissions and access levels.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            style={styles.button}
+          >
+            Manage Permissions
           </Button>
         </CardContent>
       </Card>
@@ -33,10 +47,12 @@ const SuperAdminSecurityManagementScreen = () => {
           <Typography variant="h6" component="h2">
             Update Security Protocols
           </Typography>
+          <Typography variant="body2" component="p">
+            Implement and update security protocols.
+          </Typography>
           <Button
             variant="contained"
             color="primary"
-            onClick={handleUpdateProtocols}
             style={styles.button}
           >
             Update Protocols
@@ -52,7 +68,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
   },
   card: {
@@ -60,7 +76,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
-    width: '100%',
+    width: "100%",
   },
 });
 
