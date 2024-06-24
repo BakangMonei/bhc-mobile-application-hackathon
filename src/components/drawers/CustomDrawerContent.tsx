@@ -1,11 +1,32 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
-import { Avatar, Button, Drawer, Typography } from "@mui/material";
+import { Avatar, Button, Typography } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../services/firebase";
 
 const CustomDrawerContent = (props) => {
   const { currentUser } = useContext(AuthContext);
+  const [profile, setProfile] = useState({ firstName: "", lastName: "" });
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (currentUser) {
+        try {
+          const docRef = doc(db, "s_admin", currentUser.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setProfile(docSnap.data());
+          }
+        } catch (error) {
+          console.error("Error fetching user profile: ", error);
+        }
+      }
+    };
+
+    fetchProfile();
+  }, [currentUser]);
 
   const logout = () => {
     // Implement logout functionality
@@ -16,7 +37,9 @@ const CustomDrawerContent = (props) => {
     <DrawerContentScrollView {...props}>
       <View style={styles.profileContainer}>
         <Avatar style={styles.avatar} />
-        <Typography variant="h6">{currentUser?.displayName}</Typography>
+        <Typography variant="h6">
+          {profile.firstName} {profile.lastName}
+        </Typography>
         <Typography variant="subtitle1">{currentUser?.email}</Typography>
       </View>
       <DrawerItemList {...props} />
