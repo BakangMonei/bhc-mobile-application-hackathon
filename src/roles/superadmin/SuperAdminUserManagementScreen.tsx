@@ -90,7 +90,7 @@ const SuperAdminUserManagementScreen = () => {
 
       await sendPasswordResetEmail(auth, form.email);
       alert(
-        `User added successfully. Reset password email sent to ${form.email}.`
+        `User added successfully. Reset password email sent to ${form.email}. Temporary password is tempPassword123.`
       );
 
       setForm({
