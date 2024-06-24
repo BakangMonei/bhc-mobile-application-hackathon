@@ -26,6 +26,7 @@ const RegisterScreen = ({ navigation }) => {
     username: "",
     password: "",
     confirmPassword: "",
+    role: "user",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -89,6 +90,7 @@ const RegisterScreen = ({ navigation }) => {
         zip: form.zip,
         country: form.country,
         username: form.username,
+        role: "user",
       });
 
       navigation.replace("Home");

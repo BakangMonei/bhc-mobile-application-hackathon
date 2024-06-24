@@ -17,6 +17,11 @@ const SuperAdminAnalyticsReportingScreen = () => {
   const [applicationProcesses, setApplicationProcesses] = useState([]);
   const [maintenanceRequests, setMaintenanceRequests] = useState([]);
   const [payments, setPayments] = useState([]);
+  const [propertyCounts, setPropertyCounts] = useState({
+    rent: 0,
+    lease: 0,
+    sale: 0,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +36,7 @@ const SuperAdminAnalyticsReportingScreen = () => {
           collection(db, "maintenanceRequests")
         );
         const paymentsSnapshot = await getDocs(collection(db, "payments"));
+        const propertiesSnapshot = await getDocs(collection(db, "properties"));
 
         setUserActivities(userActivitiesSnapshot.docs.map((doc) => doc.data()));
         setApplicationProcesses(
@@ -40,6 +46,23 @@ const SuperAdminAnalyticsReportingScreen = () => {
           maintenanceRequestsSnapshot.docs.map((doc) => doc.data())
         );
         setPayments(paymentsSnapshot.docs.map((doc) => doc.data()));
+
+        let rentCount = 0;
+        let leaseCount = 0;
+        let saleCount = 0;
+
+        propertiesSnapshot.docs.forEach((doc) => {
+          const data = doc.data();
+          if (data.type === "rent") rentCount++;
+          if (data.type === "lease") leaseCount++;
+          if (data.type === "sale") saleCount++;
+        });
+
+        setPropertyCounts({
+          rent: rentCount,
+          lease: leaseCount,
+          sale: saleCount,
+        });
       } catch (error) {
         console.error("Error fetching data: ", error);
       } finally {
@@ -83,6 +106,32 @@ const SuperAdminAnalyticsReportingScreen = () => {
     );
   };
 
+  const renderPieChart = () => {
+    const options = {
+      labels: ["Rent", "Lease", "Sale"],
+    };
+    const series = [
+      propertyCounts.rent,
+      propertyCounts.lease,
+      propertyCounts.sale,
+    ];
+
+    return (
+      <Card style={styles.card}>
+        <CardContent>
+          <Typography variant="h6" component="h2">
+            Property Types
+          </Typography>
+          <Chart options={options} series={series} type="pie" width="100%" />
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Typography variant="h4" component="h1" style={styles.title}>
@@ -96,6 +145,7 @@ const SuperAdminAnalyticsReportingScreen = () => {
           {renderChart("Application Processes", applicationProcesses)}
           {renderChart("Maintenance Requests", maintenanceRequests)}
           {renderChart("Payments", payments)}
+          {renderPieChart()}
           <Card style={styles.card}>
             <CardContent>
               <Typography variant="h6" component="h2">
@@ -122,6 +172,14 @@ const SuperAdminAnalyticsReportingScreen = () => {
               </Button>
             </CardContent>
           </Card>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handlePrint}
+            style={styles.printButton}
+          >
+            Print Reports
+          </Button>
         </>
       )}
     </ScrollView>
@@ -142,6 +200,12 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     width: "100%",
+  },
+  printButton: {
+    marginTop: 24,
+    width: "100%",
+    backgroundColor: "#ff9800",
+    color: "#fff",
   },
 });
 

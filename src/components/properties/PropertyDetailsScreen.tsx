@@ -36,6 +36,7 @@ const PropertyDetailsScreen = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const [propertiesForRent, setPropertiesForRent] = useState([]);
   const [propertiesForSale, setPropertiesForSale] = useState([]);
+  const [propertiesForLease, setPropertiesForLease] = useState([]);
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
@@ -44,16 +45,20 @@ const PropertyDetailsScreen = ({ navigation }) => {
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const rentProperties = [];
         const saleProperties = [];
+        const leaseProperties = [];
         snapshot.forEach((doc) => {
           const data = doc.data();
           if (data.type === "rent") {
             rentProperties.push({ ...data, id: doc.id });
           } else if (data.type === "sale") {
             saleProperties.push({ ...data, id: doc.id });
+          } else if (data.type === "lease") {
+            leaseProperties.push({ ...data, id: doc.id });
           }
         });
         setPropertiesForRent(rentProperties);
         setPropertiesForSale(saleProperties);
+        setPropertiesForLease(leaseProperties);
       });
 
       return unsubscribe;
@@ -99,6 +104,9 @@ const PropertyDetailsScreen = ({ navigation }) => {
   const filteredPropertiesForSale = propertiesForSale.filter((property) =>
     property.title.toLowerCase().includes(filter.toLowerCase())
   );
+  const filteredPropertiesForLease = propertiesForLease.filter((property) =>
+    property.title.toLowerCase().includes(filter.toLowerCase())
+  );
 
   return (
     <View style={styles.container}>
@@ -108,6 +116,7 @@ const PropertyDetailsScreen = ({ navigation }) => {
           <Select label="Filter" value={filter} onChange={handleFilterChange}>
             <MenuItem value="">All</MenuItem>
             <MenuItem value="rent">Rent</MenuItem>
+            <MenuItem value="lease">Lease</MenuItem>
             <MenuItem value="sale">Sale</MenuItem>
           </Select>
         </FormControl>
@@ -179,6 +188,70 @@ const PropertyDetailsScreen = ({ navigation }) => {
         </Typography>
         <Carousel>
           {filteredPropertiesForSale.map((property) => (
+            <Card key={property.id} style={styles.card}>
+              <CardContent>
+                <TouchableOpacity onPress={() => handlePropertyClick(property)}>
+                  <Image
+                    source={{ uri: property.image }}
+                    style={styles.cardImage}
+                  />
+                  <Typography variant="h6" component="h3">
+                    {property.title}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    {property.description}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    Location: {property.location}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    Plot Size: {property.plotSize}
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    Date of Availability: {property.dateOfAvailability}
+                  </Typography>
+                  {property.date && (
+                    <Typography variant="body2" component="p">
+                      Posted on:{" "}
+                      {new Date(
+                        property.date.seconds * 1000
+                      ).toLocaleDateString()}{" "}
+                      at{" "}
+                      {new Date(
+                        property.date.seconds * 1000
+                      ).toLocaleTimeString()}
+                    </Typography>
+                  )}
+                  <Typography variant="body2" component="p">
+                    Posted by: {property.name} ({property.phone})
+                  </Typography>
+                </TouchableOpacity>
+                {property.uid === currentUser.uid && (
+                  <>
+                    <IconButton
+                      onClick={() => handleEditProperty(property)}
+                      color="primary"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDeleteProperty(property)}
+                      color="secondary"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </Carousel>
+
+        <Typography variant="h5" component="h2" style={styles.sectionTitle}>
+          Properties for Leases
+        </Typography>
+        <Carousel>
+          {filteredPropertiesForLease.map((property) => (
             <Card key={property.id} style={styles.card}>
               <CardContent>
                 <TouchableOpacity onPress={() => handlePropertyClick(property)}>

@@ -197,6 +197,8 @@ const PropertyListingsScreen = ({ navigation }) => {
         >
           <MenuItem value="rent">Rent</MenuItem>
           <MenuItem value="sale">Sale</MenuItem>
+          <MenuItem value="lease">Lease</MenuItem>
+          
         </Select>
       </FormControl>
       <View style={styles.imageContainer}>
