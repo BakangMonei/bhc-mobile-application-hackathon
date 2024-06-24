@@ -24,7 +24,10 @@ import {
   onSnapshot,
   doc,
 } from "firebase/firestore";
-import { sendPasswordResetEmail } from "firebase/auth";
+import {
+  sendPasswordResetEmail,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 import { db, auth } from "../../services/firebase";
 import Carousel from "react-material-ui-carousel";
 
@@ -46,6 +49,7 @@ const SuperAdminUserManagementScreen = () => {
   const [loading, setLoading] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [searchRole, setSearchRole] = useState("all");
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
@@ -68,11 +72,27 @@ const SuperAdminUserManagementScreen = () => {
   const handleAddUser = async () => {
     setLoading(true);
     try {
-      await addDoc(collection(db, "users"), form);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        form.email,
+        "tempPassword123"
+      );
+      const user = userCredential.user;
+
+      const userDocData = { ...form, uid: user.uid };
+      if (form.role === "admin") {
+        await addDoc(collection(db, "admins"), userDocData);
+      } else if (form.role === "superadmin") {
+        await addDoc(collection(db, "s_admins"), userDocData);
+      } else {
+        await addDoc(collection(db, "users"), userDocData);
+      }
+
       await sendPasswordResetEmail(auth, form.email);
       alert(
         `User added successfully. Reset password email sent to ${form.email}.`
       );
+
       setForm({
         firstName: "",
         lastName: "",
@@ -135,7 +155,14 @@ const SuperAdminUserManagementScreen = () => {
   };
 
   const filterUsersByRole = (role) => {
+    if (role === "all") {
+      return users;
+    }
     return users.filter((user) => user.role === role);
+  };
+
+  const handleSearchRoleChange = (e) => {
+    setSearchRole(e.target.value);
   };
 
   return (
@@ -265,99 +292,21 @@ const SuperAdminUserManagementScreen = () => {
       <Typography variant="h6" component="h2" style={styles.sectionTitle}>
         Manage Users
       </Typography>
-      <Typography
-        variant="subtitle1"
-        component="h3"
-        style={styles.sectionTitle}
-      >
-        Users
-      </Typography>
+      <FormControl fullWidth margin="normal" variant="outlined">
+        <InputLabel>Filter by Role</InputLabel>
+        <Select
+          label="Filter by Role"
+          value={searchRole}
+          onChange={handleSearchRoleChange}
+        >
+          <MenuItem value="all">All</MenuItem>
+          <MenuItem value="user">User</MenuItem>
+          <MenuItem value="admin">Admin</MenuItem>
+          <MenuItem value="superadmin">Superadmin</MenuItem>
+        </Select>
+      </FormControl>
       <Carousel>
-        {filterUsersByRole("user").map((user) => (
-          <Card key={user.id} style={styles.card}>
-            <CardContent>
-              <Typography variant="h6" component="h2">
-                {user.firstName} {user.lastName}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Email: {user.email}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Role: {user.role}
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleOpenEditModal(user)}
-                style={styles.button}
-                disabled={loading}
-              >
-                Edit User
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleDeleteUser(user.id)}
-                style={styles.button}
-                disabled={loading}
-              >
-                Delete User
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </Carousel>
-      <Typography
-        variant="subtitle1"
-        component="h3"
-        style={styles.sectionTitle}
-      >
-        Admins
-      </Typography>
-      <Carousel>
-        {filterUsersByRole("admin").map((user) => (
-          <Card key={user.id} style={styles.card}>
-            <CardContent>
-              <Typography variant="h6" component="h2">
-                {user.firstName} {user.lastName}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Email: {user.email}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Role: {user.role}
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleOpenEditModal(user)}
-                style={styles.button}
-                disabled={loading}
-              >
-                Edit User
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleDeleteUser(user.id)}
-                style={styles.button}
-                disabled={loading}
-              >
-                Delete User
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </Carousel>
-      <Typography
-        variant="subtitle1"
-        component="h3"
-        style={styles.sectionTitle}
-      >
-        Super Admins
-      </Typography>
-      <Carousel>
-        {filterUsersByRole("superadmin").map((user) => (
+        {filterUsersByRole(searchRole).map((user) => (
           <Card key={user.id} style={styles.card}>
             <CardContent>
               <Typography variant="h6" component="h2">
