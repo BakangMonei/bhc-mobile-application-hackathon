@@ -63,7 +63,7 @@ const LoginScreen = ({ navigation }) => {
         where("email", "==", email)
       );
       const adminQuery = query(
-        collection(db, "admins"),
+        collection(db, "admin"),
         where("email", "==", email)
       );
       const superAdminQuery = query(

@@ -23,6 +23,7 @@ import {
   deleteDoc,
   onSnapshot,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import {
   sendPasswordResetEmail,
@@ -81,16 +82,16 @@ const SuperAdminUserManagementScreen = () => {
 
       const userDocData = { ...form, uid: user.uid };
       if (form.role === "admin") {
-        await addDoc(collection(db, "admins"), userDocData);
+        await setDoc(doc(db, "admin", user.uid), userDocData);
       } else if (form.role === "superadmin") {
-        await addDoc(collection(db, "s_admins"), userDocData);
+        await setDoc(doc(db, "s_admin", user.uid), userDocData);
       } else {
-        await addDoc(collection(db, "users"), userDocData);
+        await setDoc(doc(db, "users", user.uid), userDocData);
       }
 
       await sendPasswordResetEmail(auth, form.email);
       alert(
-        `User added successfully. Reset password email sent to ${form.email}. Temporary password is tempPassword123.`
+        `User added successfully. Reset password email sent to ${form.email}.`
       );
 
       setForm({
