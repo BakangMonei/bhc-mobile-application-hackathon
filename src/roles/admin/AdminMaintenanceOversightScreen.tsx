@@ -13,12 +13,11 @@ import {
   updateDoc,
   doc,
   addDoc,
-  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { AuthContext } from "../../context/AuthContext";
 
-const SuperAdminMaintenanceOversightScreen = ({ navigation }) => {
+const AdminMaintenanceOversightScreen = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const [maintenanceRequests, setMaintenanceRequests] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -54,8 +53,8 @@ const SuperAdminMaintenanceOversightScreen = ({ navigation }) => {
       await addDoc(collection(db, "maintenanceRequests", id, "comments"), {
         content: newComment,
         userId: currentUser.uid,
-        firstName: currentUser.firstName || "Unknown",
-        timestamp: serverTimestamp(),
+        firstName: currentUser.firstName,
+        timestamp: new Date(),
       });
       setNewComment("");
       console.log("Comment added successfully");
@@ -105,8 +104,8 @@ const SuperAdminMaintenanceOversightScreen = ({ navigation }) => {
             <Typography variant="h6" component="h2">
               Responses
             </Typography>
-            {req.comments &&
-              req.comments.map((res, index) => (
+            {req.responses &&
+              req.responses.map((res, index) => (
                 <View key={index} style={styles.response}>
                   <Typography variant="body2" component="p">
                     {res.content}
@@ -184,4 +183,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SuperAdminMaintenanceOversightScreen;
+export default AdminMaintenanceOversightScreen;

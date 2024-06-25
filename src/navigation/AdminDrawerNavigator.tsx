@@ -7,6 +7,7 @@ import AdminPropertyManagementScreen from "../roles/admin/AdminPropertyManagemen
 import AdminPaymentManagementScreen from "../roles/admin/AdminPaymentManagementScreen";
 import AdminReportingScreen from "../roles/admin/AdminReportingScreen";
 import AdminBottomNav from "../components/common/AdminBottomNav";
+import AdminMaintenanceOversightScreen from "../roles/admin/AdminMaintenanceOversightScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -32,6 +33,10 @@ const AdminDrawerNavigator: React.FC = () => {
       <Drawer.Screen
         name="Reporting & Analytics"
         component={AdminReportingScreen}
+      />
+      <Drawer.Screen
+        name="Maintenance Oversight"
+        component={AdminMaintenanceOversightScreen}
       />
     </Drawer.Navigator>
   );

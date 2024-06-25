@@ -18,6 +18,8 @@ import {
   query,
   where,
   serverTimestamp,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 import { db, auth, storage } from "../../services/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -31,6 +33,7 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
   const [status, setStatus] = useState("Pending");
   const [image, setImage] = useState(null);
   const [maintenanceRequests, setMaintenanceRequests] = useState([]);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     if (currentUser) {
@@ -91,6 +94,31 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
       setImage(result.assets[0].uri);
     } else {
       Alert.alert("You did not select any image.");
+    }
+  };
+
+  const handleDeleteRequest = async (id) => {
+    try {
+      await deleteDoc(doc(db, "maintenanceRequests", id));
+      console.log("Maintenance request deleted successfully");
+    } catch (error) {
+      console.error("Error deleting maintenance request:", error);
+    }
+  };
+
+  const handleAddComment = async (id) => {
+    if (!newComment) return;
+    try {
+      await addDoc(collection(db, "maintenanceRequests", id, "comments"), {
+        content: newComment,
+        userId: currentUser.uid,
+        firstName: currentUser.firstName,
+        timestamp: serverTimestamp(),
+      });
+      setNewComment("");
+      console.log("Comment added successfully");
+    } catch (error) {
+      console.error("Error adding comment:", error);
     }
   };
 
@@ -186,6 +214,45 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
             {req.image && (
               <Image source={{ uri: req.image }} style={styles.cardImage} />
             )}
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => handleDeleteRequest(req.id)}
+              style={styles.button}
+            >
+              Delete Request
+            </Button>
+            <Typography variant="h6" component="h2">
+              Responses
+            </Typography>
+            {req.responses &&
+              req.responses.map((res, index) => (
+                <View key={index} style={styles.response}>
+                  <Typography variant="body2" component="p">
+                    {res.content}
+                  </Typography>
+                  <Typography variant="caption" component="p">
+                    - {res.firstName} on{" "}
+                    {res.timestamp.toDate().toLocaleString()}
+                  </Typography>
+                </View>
+              ))}
+            <TextField
+              label="Add a comment"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleAddComment(req.id)}
+              style={styles.button}
+            >
+              Add Comment
+            </Button>
           </CardContent>
         </Card>
       ))}
@@ -200,6 +267,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 24,
+    color: "#ff9800",
   },
   sectionTitle: {
     marginTop: 16,
@@ -207,10 +275,19 @@ const styles = StyleSheet.create({
   },
   card: {
     marginBottom: 16,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   button: {
     marginTop: 16,
     width: "100%",
+    backgroundColor: "#ff9800",
+    color: "#fff",
   },
   imageContainer: {
     flexDirection: "row",
@@ -227,6 +304,12 @@ const styles = StyleSheet.create({
     height: 150,
     objectFit: "cover",
     marginTop: 8,
+  },
+  response: {
+    marginTop: 8,
+    padding: 8,
+    backgroundColor: "#f5f5f5",
+    borderRadius: 4,
   },
 });
 
