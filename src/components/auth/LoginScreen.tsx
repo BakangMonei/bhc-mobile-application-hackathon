@@ -81,7 +81,8 @@ const LoginScreen = ({ navigation }) => {
         navigation.replace("AdminDrawerNavigator");
         // navigation.replace("AdminBottomNav");
       } else if (!userSnapshot.empty) {
-        navigation.replace("Home");
+        // navigation.replace("Home");
+        navigation.replace("DrawerNavigator");
       } else {
         Alert.alert("Error", "No such document!");
       }

@@ -17,6 +17,7 @@ import InquiryFormScreen from "./components/information/InquiryFormScreen";
 import AdminHomeScreen from "./roles/admin/AdminHomeScreen";
 import AdminDrawerNavigator  from "./navigation/AdminDrawerNavigator";
 import AdminBottomNav from "./components/common/AdminBottomNav";
+import DrawerNavigator from "./components/drawers/DrawerNavigator";
 
 const Stack = createStackNavigator();
 
@@ -57,11 +58,13 @@ const App: React.FC = () => {
           <Stack.Screen
             name="FAQStackNavigator"
             component={FAQStackNavigator}
+            
           />
 
           <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />
           <Stack.Screen name="AdminDrawerNavigator" component={AdminDrawerNavigator} />
           <Stack.Screen name="AdminBottomNav" component={AdminBottomNav} />
+          <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

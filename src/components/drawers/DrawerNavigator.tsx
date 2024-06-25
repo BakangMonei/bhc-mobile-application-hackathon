@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import BottomNav from "../common/BottomNav";
 import FAQStackNavigator from "../../navigation/FAQStackNavigator";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import UserCustomDrawerContent from "./UserCustomDrawerContent"; // Assuming the path to your custom drawer content
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator: React.FC = () => {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator drawerContent={(props) => <UserCustomDrawerContent{...props} />}>
       <Drawer.Screen
         name="Home"
         component={BottomNav}
