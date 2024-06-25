@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ScrollView, StyleSheet } from "react-native";
-import { TextField, Button, Typography } from "@mui/material";
+import { ScrollView, StyleSheet, Alert } from "react-native";
+import { TextField, Button, Typography, CircularProgress } from "@mui/material";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { AuthContext } from "../../context/AuthContext";
@@ -12,9 +12,12 @@ const EditProfileScreen = ({ navigation }) => {
     lastName: "",
     email: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({ firstName: "", lastName: "" });
 
   useEffect(() => {
     const fetchProfile = async () => {
+      setLoading(true);
       try {
         const docRef = doc(db, "users", currentUser.uid);
         const docSnap = await getDoc(docRef);
@@ -23,31 +26,52 @@ const EditProfileScreen = ({ navigation }) => {
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
+        Alert.alert("Error", "Error fetching profile. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProfile();
   }, [currentUser]);
 
-  useEffect(() => {
-    console.log("Profile data has changed:", profile);
-  }, [profile]);
+  const handleChange = (field, value) => {
+    setProfile({ ...profile, [field]: value });
+  };
 
-  const handleChange = (e) => {
-    setProfile({
-      ...profile,
-      [e.target.name]: e.target.value,
-    });
+  const validateInputs = () => {
+    let valid = true;
+    let firstNameError = "";
+    let lastNameError = "";
+
+    if (!profile.firstName) {
+      firstNameError = "First name is required";
+      valid = false;
+    }
+
+    if (!profile.lastName) {
+      lastNameError = "Last name is required";
+      valid = false;
+    }
+
+    setErrors({ firstName: firstNameError, lastName: lastNameError });
+    return valid;
   };
 
   const handleSubmit = async () => {
+    if (!validateInputs()) return;
+
+    setLoading(true);
     try {
       const docRef = doc(db, "users", currentUser.uid);
       await updateDoc(docRef, profile);
-      console.log("Profile updated successfully");
+      Alert.alert("Success", "Profile updated successfully");
       navigation.goBack();
     } catch (error) {
       console.error("Error updating profile:", error);
+      Alert.alert("Error", "Error updating profile. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,25 +84,30 @@ const EditProfileScreen = ({ navigation }) => {
         label="First Name"
         name="firstName"
         value={profile.firstName}
-        onChange={handleChange}
+        onChange={(e) => handleChange("firstName", e.target.value)}
         fullWidth
         margin="normal"
         variant="outlined"
+        error={!!errors.firstName}
+        helperText={errors.firstName}
+        disabled={loading}
       />
       <TextField
         label="Last Name"
         name="lastName"
         value={profile.lastName}
-        onChange={handleChange}
+        onChange={(e) => handleChange("lastName", e.target.value)}
         fullWidth
         margin="normal"
         variant="outlined"
+        error={!!errors.lastName}
+        helperText={errors.lastName}
+        disabled={loading}
       />
       <TextField
         label="Email"
         name="email"
         value={profile.email}
-        onChange={handleChange}
         fullWidth
         margin="normal"
         variant="outlined"
@@ -89,8 +118,13 @@ const EditProfileScreen = ({ navigation }) => {
         color="primary"
         onClick={handleSubmit}
         style={styles.button}
+        disabled={loading}
       >
-        Save Changes
+        {loading ? (
+          <CircularProgress color="inherit" size={24} />
+        ) : (
+          "Save Changes"
+        )}
       </Button>
     </ScrollView>
   );
@@ -99,13 +133,16 @@ const EditProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
+    color: "#333",
   },
   button: {
     marginTop: 16,
+    backgroundColor: "#ff9800",
   },
 });
 

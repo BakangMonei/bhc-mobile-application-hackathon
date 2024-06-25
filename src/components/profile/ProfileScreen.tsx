@@ -1,9 +1,20 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
-import { TextField, Button, Typography, Divider } from "@mui/material";
+import { ScrollView, StyleSheet, View } from "react-native";
+import {
+  TextField,
+  Button,
+  Typography,
+  Divider,
+  CircularProgress,
+  Avatar,
+} from "@mui/material";
 import { doc, getDoc } from "firebase/firestore";
 import { db, auth } from "../../services/firebase";
 import { AuthContext } from "../../context/AuthContext";
+import EditIcon from "@mui/icons-material/Edit";
+import LockIcon from "@mui/icons-material/Lock";
+import LogoutIcon from "@mui/icons-material/Logout";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const ProfileScreen = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
@@ -12,6 +23,7 @@ const ProfileScreen = ({ navigation }) => {
     lastName: "",
     email: "",
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -23,15 +35,13 @@ const ProfileScreen = ({ navigation }) => {
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProfile();
   }, [currentUser]);
-
-  useEffect(() => {
-    console.log("Profile data has changed:", profile);
-  }, [profile]);
 
   const handleEditProfile = () => {
     navigation.navigate("EditProfileScreen");
@@ -41,7 +51,6 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate("ChangePassword");
   };
 
-  
   const handleLogout = () => {
     auth
       .signOut()
@@ -59,78 +68,105 @@ const ProfileScreen = ({ navigation }) => {
         My Profile
       </Typography>
       <Divider style={styles.divider} />
-      <Typography variant="h6" component="h2">
-        Profile Information
-      </Typography>
-      <TextField
-        label="First Name"
-        name="firstName"
-        value={profile.firstName}
-        fullWidth
-        margin="normal"
-        variant="outlined"
-        disabled
-      />
-      <TextField
-        label="Last Name"
-        name="lastName"
-        value={profile.lastName}
-        fullWidth
-        margin="normal"
-        variant="outlined"
-        disabled
-      />
-      <TextField
-        label="Email"
-        name="email"
-        value={profile.email}
-        fullWidth
-        margin="normal"
-        variant="outlined"
-        disabled
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleEditProfile}
-        style={styles.button}
-      >
-        Edit Profile
-      </Button>
-      <Divider style={styles.divider} />
-      <Typography variant="h6" component="h2">
-        Password Settings
-      </Typography>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={handleChangePassword}
-        style={styles.button}
-      >
-        Change Password
-      </Button>
-      <Divider style={styles.divider} />
-      <Typography variant="h6" component="h2">
-        Other Settings
-      </Typography>
-      <Button variant="contained" color="secondary" style={styles.button}>
-        Other Setting 1
-      </Button>
-      <Button variant="contained" color="secondary" style={styles.button}>
-        Other Setting 2
-      </Button>
-      <Divider style={styles.divider} />
-      <Typography variant="h6" component="h2">
-        Logout
-      </Typography>
-      <Button
-        variant="contained"
-        color="error"
-        onClick={handleLogout}
-        style={styles.button}
-      >
-        Logout
-      </Button>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <View style={styles.avatarContainer}>
+            <Avatar style={styles.avatar}>{profile.firstName.charAt(0)}</Avatar>
+            <Typography variant="h6" style={styles.name}>
+              {profile.firstName} {profile.lastName}
+            </Typography>
+            <Typography variant="subtitle1">{currentUser?.email}</Typography>
+          </View>
+          <Divider style={styles.divider} />
+          <Typography variant="h6" component="h2">
+            Profile Information
+          </Typography>
+          <TextField
+            label="First Name"
+            name="firstName"
+            value={profile.firstName}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            disabled
+          />
+          <TextField
+            label="Last Name"
+            name="lastName"
+            value={profile.lastName}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            disabled
+          />
+          <TextField
+            label="Email"
+            name="email"
+            value={profile.email}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            disabled
+          />
+          <Button
+            variant="contained"
+            
+            onClick={handleEditProfile}
+            style={styles.button}
+            startIcon={<EditIcon />}
+          >
+            Edit Profile
+          </Button>
+          <Divider style={styles.divider} />
+          <Typography variant="h6" component="h2">
+            Password Settings
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleChangePassword}
+            style={styles.button}
+            startIcon={<LockIcon />}
+          >
+            Change Password
+          </Button>
+          <Divider style={styles.divider} />
+          <Typography variant="h6" component="h2">
+            Other Settings
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            style={styles.button}
+            startIcon={<SettingsIcon />}
+          >
+            Other Setting 1
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            style={styles.button}
+            startIcon={<SettingsIcon />}
+          >
+            Other Setting 2
+          </Button>
+          <Divider style={styles.divider} />
+          <Typography variant="h6" component="h2">
+            Logout
+          </Typography>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleLogout}
+            style={styles.button}
+            startIcon={<LogoutIcon />}
+          >
+            Logout
+          </Button>
+        </>
+      )}
     </ScrollView>
   );
 };
@@ -138,7 +174,7 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",
@@ -151,6 +187,21 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     width: "100%",
+    backgroundColor: "#FAA21B"
+  },
+  avatarContainer: {
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  avatar: {
+    marginBottom: 16,
+    backgroundColor: "#3f51b5",
+    width: 64,
+    height: 64,
+  },
+  name: {
+    fontWeight: "bold",
+    marginBottom: 8,
   },
 });
 
