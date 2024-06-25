@@ -17,8 +17,13 @@ import InquiryFormScreen from "./components/information/InquiryFormScreen";
 import AdminHomeScreen from "./roles/admin/AdminHomeScreen";
 import AdminDrawerNavigator  from "./navigation/AdminDrawerNavigator";
 import AdminBottomNav from "./components/common/AdminBottomNav";
+
 import DrawerNavigator from "./components/drawers/DrawerNavigator";
 import ForgotPassword from "./components/auth/ForgotPassword";
+
+import InboxScreen from "./components/messaging/InboxScreen";
+import MessageSendScreen from "./components/messaging/MessageSendScreen";
+import MessageDetailScreen from "./components/messaging/MessageDetailScreen";
 
 const Stack = createStackNavigator();
 
@@ -67,6 +72,9 @@ const App: React.FC = () => {
           <Stack.Screen name="AdminBottomNav" component={AdminBottomNav} />
           <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+          <Stack.Screen name="MessageSendScreen" component={MessageSendScreen}/>
+          <Stack.Screen name="InboxScreen" component={InboxScreen}/>
+          <Stack.Screen name="MessageDetailScreen" component={MessageDetailScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
