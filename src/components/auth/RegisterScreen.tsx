@@ -6,11 +6,31 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { TextField, Button, Typography, Link, IconButton } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Link,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { auth, db } from "../../services/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import {
+  Email,
+  Person,
+  Phone,
+  Home,
+  LocationCity,
+  Public,
+  Lock,
+  Visibility,
+  VisibilityOff,
+  AccountCircle,
+  ConfirmationNumber,
+} from "@mui/icons-material";
 
 const RegisterScreen = ({ navigation }) => {
   const [form, setForm] = useState({
@@ -43,11 +63,17 @@ const RegisterScreen = ({ navigation }) => {
 
   const evaluatePasswordStrength = (password) => {
     let strength = "Weak";
-    if (password.length > 8) {
-      strength = "Medium";
-    }
-    if (password.length > 12) {
-      strength = "Strong";
+    if (password.length > 10) {
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumbers = /\d/.test(password);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+      if (hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar) {
+        strength = "Strong";
+      } else {
+        strength = "Medium";
+      }
     }
     setPasswordStrength(strength);
   };
@@ -118,6 +144,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.firstName}
           helperText={errors.firstName}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Person />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="Last Name"
@@ -128,6 +161,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.lastName}
           helperText={errors.lastName}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Person />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="Email"
@@ -138,6 +178,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.email}
           helperText={errors.email}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Email />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="Phone"
@@ -148,6 +195,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.phone}
           helperText={errors.phone}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Phone />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="Address"
@@ -158,6 +212,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.address}
           helperText={errors.address}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Home />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="City"
@@ -168,6 +229,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.city}
           helperText={errors.city}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <LocationCity />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="State"
@@ -178,6 +246,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.state}
           helperText={errors.state}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Public />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="ZIP"
@@ -188,6 +263,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.zip}
           helperText={errors.zip}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <ConfirmationNumber />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="Country"
@@ -198,6 +280,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.country}
           helperText={errors.country}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Public />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="Username"
@@ -208,6 +297,13 @@ const RegisterScreen = ({ navigation }) => {
           variant="outlined"
           error={!!errors.username}
           helperText={errors.username}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircle />
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="Password"
@@ -220,12 +316,17 @@ const RegisterScreen = ({ navigation }) => {
           error={!!errors.password}
           helperText={errors.password}
           InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Lock />
+              </InputAdornment>
+            ),
             endAdornment: (
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                <IconButton>
-                  <Icon name={showPassword ? "visibility-off" : "visibility"} />
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
-              </TouchableOpacity>
+              </InputAdornment>
             ),
           }}
         />
@@ -243,12 +344,17 @@ const RegisterScreen = ({ navigation }) => {
           error={!!errors.confirmPassword}
           helperText={errors.confirmPassword}
           InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Lock />
+              </InputAdornment>
+            ),
             endAdornment: (
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                <IconButton>
-                  <Icon name={showPassword ? "visibility-off" : "visibility"} />
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
-              </TouchableOpacity>
+              </InputAdornment>
             ),
           }}
         />
@@ -283,6 +389,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 16,
+    backgroundColor: "#fff",
   },
   logo: {
     width: 150,
@@ -296,6 +403,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
+    backgroundColor: "#ff9800",
   },
   link: {
     marginTop: 16,

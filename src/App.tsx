@@ -18,6 +18,7 @@ import AdminHomeScreen from "./roles/admin/AdminHomeScreen";
 import AdminDrawerNavigator  from "./navigation/AdminDrawerNavigator";
 import AdminBottomNav from "./components/common/AdminBottomNav";
 import DrawerNavigator from "./components/drawers/DrawerNavigator";
+import ForgotPassword from "./components/auth/ForgotPassword";
 
 const Stack = createStackNavigator();
 
@@ -65,6 +66,7 @@ const App: React.FC = () => {
           <Stack.Screen name="AdminDrawerNavigator" component={AdminDrawerNavigator} />
           <Stack.Screen name="AdminBottomNav" component={AdminBottomNav} />
           <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

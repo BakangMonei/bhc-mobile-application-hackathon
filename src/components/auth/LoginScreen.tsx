@@ -79,9 +79,7 @@ const LoginScreen = ({ navigation }) => {
         navigation.replace("SuperAdminDashboard");
       } else if (!adminSnapshot.empty) {
         navigation.replace("AdminDrawerNavigator");
-        // navigation.replace("AdminBottomNav");
       } else if (!userSnapshot.empty) {
-        // navigation.replace("Home");
         navigation.replace("DrawerNavigator");
       } else {
         Alert.alert("Error", "No such document!");
@@ -183,40 +181,35 @@ const styles = StyleSheet.create({
   },
   topLeftCircle: {
     position: "absolute",
-    top: -25,
-    left: -25,
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    backgroundColor: "orange",
+    top: -50,
+    left: -50,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: "#ff9800",
   },
   logo: {
     width: 150,
     height: 150,
     alignSelf: "center",
     marginBottom: 24,
-    zIndex: 2,
   },
   title: {
     marginBottom: 24,
     textAlign: "center",
-    zIndex: 2,
   },
   button: {
     marginTop: 16,
-    zIndex: 2,
-    backgroundColor: "orange",
+    backgroundColor: "#ff9800",
   },
   forgotPasswordLink: {
     marginTop: 4,
     alignSelf: "flex-start",
-    zIndex: 2,
   },
   registerLink: {
     position: "absolute",
     bottom: 20,
     alignSelf: "center",
-    zIndex: 2,
   },
 });
 
