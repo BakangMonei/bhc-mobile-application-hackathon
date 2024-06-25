@@ -8,11 +8,14 @@ import {
   IconButton,
   InputAdornment,
   CircularProgress,
+  Popover,
+  Box,
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { auth, db } from "../../services/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -20,6 +23,13 @@ const LoginScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({ email: "", password: "" });
+  const [otp, setOtp] = useState("");
+  const [otpPopover, setOtpPopover] = useState(false);
+  const [otpAnchor, setOtpAnchor] = useState(null);
+  const [otpInput, setOtpInput] = useState("");
+
+  const functions = getFunctions();
+  const sendOtpEmail = httpsCallable(functions, "sendOtpEmail");
 
   const validateInputs = () => {
     let valid = true;
@@ -46,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
     return valid;
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
     if (!validateInputs()) return;
 
     setLoading(true);
@@ -75,12 +85,18 @@ const LoginScreen = ({ navigation }) => {
       const adminSnapshot = await getDocs(adminQuery);
       const superAdminSnapshot = await getDocs(superAdminQuery);
 
-      if (!superAdminSnapshot.empty) {
-        navigation.replace("SuperAdminDashboard");
-      } else if (!adminSnapshot.empty) {
-        navigation.replace("AdminDrawerNavigator");
-      } else if (!userSnapshot.empty) {
-        navigation.replace("DrawerNavigator");
+      if (
+        !superAdminSnapshot.empty ||
+        !adminSnapshot.empty ||
+        !userSnapshot.empty
+      ) {
+        const otpResult = await sendOtpEmail({ email });
+        if (otpResult.data.success) {
+          setOtp(otpResult.data.otp); // Save OTP for verification
+          console.log("OTP sent: ", otpResult.data.otp);
+          setOtpAnchor(event.currentTarget);
+          setOtpPopover(true);
+        }
       } else {
         Alert.alert("Error", "No such document!");
       }
@@ -93,6 +109,44 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+  const handleClosePopover = () => {
+    setOtpPopover(false);
+    setOtpAnchor(null);
+  };
+
+  const handleVerifyOtp = async () => {
+    if (otpInput === otp) {
+      const userQuery = query(
+        collection(db, "users"),
+        where("email", "==", email)
+      );
+      const adminQuery = query(
+        collection(db, "admin"),
+        where("email", "==", email)
+      );
+      const superAdminQuery = query(
+        collection(db, "s_admin"),
+        where("email", "==", email)
+      );
+
+      const userSnapshot = await getDocs(userQuery);
+      const adminSnapshot = await getDocs(adminQuery);
+      const superAdminSnapshot = await getDocs(superAdminQuery);
+
+      if (!superAdminSnapshot.empty) {
+        navigation.replace("SuperAdminDashboard");
+      } else if (!adminSnapshot.empty) {
+        navigation.replace("AdminDrawerNavigator");
+      } else if (!userSnapshot.empty) {
+        navigation.replace("DrawerNavigator");
+      } else {
+        Alert.alert("Error", "No such document!");
+      }
+    } else {
+      Alert.alert("Error", "Invalid OTP. Please try again.");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -168,6 +222,39 @@ const LoginScreen = ({ navigation }) => {
       >
         Don't have an account? Register
       </Link>
+      <Popover
+        open={otpPopover}
+        anchorEl={otpAnchor}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "center",
+        }}
+      >
+        <Box p={2}>
+          <Typography variant="h6">Enter OTP</Typography>
+          <TextField
+            label="OTP"
+            value={otpInput}
+            onChange={(e) => setOtpInput(e.target.value)}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+          />
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={handleVerifyOtp}
+            style={styles.button}
+          >
+            Verify OTP
+          </Button>
+        </Box>
+      </Popover>
     </View>
   );
 };
