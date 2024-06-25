@@ -8,42 +8,8 @@ const AdminHomeScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Admin Home</Text>
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate("User Support")}
-        style={styles.button}
-      >
-        User Support
-      </Button>
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate("Content Management")}
-        style={styles.button}
-      >
-        Content Management
-      </Button>
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate("Property Management")}
-        style={styles.button}
-      >
-        Property Management
-      </Button>
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate("Payment Management")}
-        style={styles.button}
-      >
-        Payment Management
-      </Button>
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate("Reporting & Analytics")}
-        style={styles.button}
-      >
-        Reporting & Analytics
-      </Button>
+      <>
+      </>
     </View>
   );
 };

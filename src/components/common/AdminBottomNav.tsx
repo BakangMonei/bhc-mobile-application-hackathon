@@ -24,8 +24,8 @@ const AdminBottomNav: React.FC = () => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: "tomato",
-        inactiveTintColor: "gray",
+        activeTintColor: "red",
+        inactiveTintColor: "black",
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
