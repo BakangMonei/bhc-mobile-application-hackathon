@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import {
   TextField,
   Button,
   Typography,
   Card,
   CardContent,
+  CircularProgress,
 } from "@mui/material";
 import {
   collection,
@@ -14,6 +15,7 @@ import {
   query,
   where,
   onSnapshot,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { AuthContext } from "../../context/AuthContext";
@@ -28,6 +30,7 @@ const PaymentsScreen = () => {
     paymentMethod: "Bank Card",
   });
   const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
@@ -39,6 +42,7 @@ const PaymentsScreen = () => {
         const fetchedPayments = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
+          date: doc.data().date ? doc.data().date.toDate() : new Date(), // Handle date field
         }));
         setPayments(fetchedPayments);
       });
@@ -55,6 +59,7 @@ const PaymentsScreen = () => {
   };
 
   const handlePayment = async () => {
+    setLoading(true);
     try {
       const paymentData = {
         ...paymentDetails,
@@ -72,6 +77,8 @@ const PaymentsScreen = () => {
       });
     } catch (error) {
       console.error("Error making payment:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -126,8 +133,13 @@ const PaymentsScreen = () => {
             color="primary"
             onClick={handlePayment}
             style={styles.button}
+            disabled={loading}
           >
-            Pay Now
+            {loading ? (
+              <CircularProgress color="inherit" size={24} />
+            ) : (
+              "Pay Now"
+            )}
           </Button>
         </CardContent>
       </Card>
@@ -144,7 +156,7 @@ const PaymentsScreen = () => {
               Payment Method: {payment.paymentMethod}
             </Typography>
             <Typography variant="body2" component="p">
-              Date: {payment.date.toDate().toLocaleString()}
+              Date: {payment.date.toLocaleString()}
             </Typography>
           </CardContent>
         </Card>
@@ -156,21 +168,33 @@ const PaymentsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
+    color: "#ff9800",
   },
   card: {
     marginBottom: 16,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   button: {
     marginTop: 16,
     width: "100%",
+    backgroundColor: "#ff9800",
+    color: "#fff",
   },
   sectionTitle: {
     marginTop: 24,
     marginBottom: 16,
+    color: "#ff9800",
   },
 });
 
