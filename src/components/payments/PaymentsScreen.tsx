@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import {
   TextField,
   Button,
@@ -15,7 +15,6 @@ import {
   query,
   where,
   onSnapshot,
-  Timestamp,
 } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { AuthContext } from "../../context/AuthContext";
@@ -84,12 +83,12 @@ const PaymentsScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
+      {/* <Typography variant="h4" component="h1" style={styles.title}>
         Payments
-      </Typography>
+      </Typography> */}
       <Card style={styles.card}>
         <CardContent>
-          <Typography variant="h6" component="h2">
+          <Typography variant="h6" component="h2" style={styles.sectionTitle}>
             Make a Payment
           </Typography>
           <TextField
@@ -173,7 +172,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 24,
-    color: "#ff9800",
+    color: "#AD2524",
   },
   card: {
     marginBottom: 16,
@@ -188,13 +187,13 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     width: "100%",
-    backgroundColor: "#ff9800",
+    backgroundColor: "#FAA21B",
     color: "#fff",
   },
   sectionTitle: {
     marginTop: 24,
     marginBottom: 16,
-    color: "#ff9800",
+    color: "#AD2524",
   },
 });
 

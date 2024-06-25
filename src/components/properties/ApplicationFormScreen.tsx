@@ -3,7 +3,6 @@ import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import { TextField, Button, Typography } from "@mui/material";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../services/firebase";
-import BottomNav from "../common/BottomNav";
 
 const ApplicationFormScreen = ({ route, navigation }) => {
   const { property } = route.params;
@@ -28,7 +27,6 @@ const ApplicationFormScreen = ({ route, navigation }) => {
   const handleSubmit = async () => {
     try {
       await addDoc(collection(db, "applications"), form);
-
       Alert.alert("Success", "Application submitted successfully", [
         {
           text: "OK",
@@ -92,16 +90,12 @@ const ApplicationFormScreen = ({ route, navigation }) => {
         fullWidth
         margin="normal"
         variant="outlined"
+        multiline
+        rows={4}
       />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubmit}
-        style={styles.button}
-      >
+      <Button variant="contained" style={styles.button} onClick={handleSubmit}>
         Submit Application
       </Button>
-
     </ScrollView>
   );
 };
@@ -109,13 +103,17 @@ const ApplicationFormScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
+    color: "#AD2524",
   },
   button: {
     marginTop: 16,
+    backgroundColor: "#FAA21B",
+    color: "#fff",
   },
 });
 

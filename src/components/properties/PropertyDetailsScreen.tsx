@@ -248,7 +248,7 @@ const PropertyDetailsScreen = ({ navigation }) => {
         </Carousel>
 
         <Typography variant="h5" component="h2" style={styles.sectionTitle}>
-          Properties for Leases
+          Properties for Lease
         </Typography>
         <Carousel>
           {filteredPropertiesForLease.map((property) => (
@@ -329,13 +329,25 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     padding: 16,
+    backgroundColor: "#fff",
   },
   sectionTitle: {
     marginTop: 16,
     marginBottom: 8,
+    color: "#AD2524",
   },
   card: {
     marginBottom: 16,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   cardImage: {
     width: "100%",
@@ -346,6 +358,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 16,
     right: 16,
+    backgroundColor: "#FAA21B",
   },
 });
 

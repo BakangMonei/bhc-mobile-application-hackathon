@@ -1,7 +1,18 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ScrollView, StyleSheet, Image, View } from "react-native";
-import { Typography, Card, CardContent, TextField, Button } from "@mui/material";
-import { collection, addDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
+import {
+  Typography,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+} from "@mui/material";
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -27,12 +38,15 @@ const MaintenanceDetailScreen = ({ route }) => {
   const handleAddComment = async () => {
     if (newComment.trim() === "") return;
     try {
-      await addDoc(collection(db, "maintenanceRequests", requestId, "comments"), {
-        comment: newComment,
-        userId: currentUser.uid,
-        firstName: currentUser.firstName,
-        createdAt: serverTimestamp(),
-      });
+      await addDoc(
+        collection(db, "maintenanceRequests", requestId, "comments"),
+        {
+          comment: newComment,
+          userId: currentUser.uid,
+          firstName: currentUser.firstName,
+          createdAt: serverTimestamp(),
+        }
+      );
       setNewComment("");
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -59,7 +73,10 @@ const MaintenanceDetailScreen = ({ route }) => {
             Description: {requestDetails.description}
           </Typography>
           {requestDetails.image && (
-            <Image source={{ uri: requestDetails.image }} style={styles.image} />
+            <Image
+              source={{ uri: requestDetails.image }}
+              style={styles.image}
+            />
           )}
         </CardContent>
       </Card>
@@ -73,7 +90,8 @@ const MaintenanceDetailScreen = ({ route }) => {
               {comment.comment}
             </Typography>
             <Typography variant="caption" component="p">
-              {comment.firstName} - {comment.createdAt?.toDate().toLocaleString()}
+              {comment.firstName} -{" "}
+              {comment.createdAt?.toDate().toLocaleString()}
             </Typography>
           </CardContent>
         </Card>
@@ -85,12 +103,12 @@ const MaintenanceDetailScreen = ({ route }) => {
         fullWidth
         margin="normal"
         variant="outlined"
+        InputLabelProps={{ style: { color: "#FAA21B" } }}
       />
       <Button
         variant="contained"
-        color="primary"
-        onClick={handleAddComment}
         style={styles.button}
+        onClick={handleAddComment}
       >
         Add Comment
       </Button>
@@ -101,11 +119,12 @@ const MaintenanceDetailScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
-    color: "#ff9800",
+    color: "#AD2524",
   },
   card: {
     marginBottom: 16,
@@ -120,12 +139,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginTop: 16,
     marginBottom: 8,
-    color: "#ff9800",
+    color: "#FAA21B",
   },
   button: {
     marginTop: 16,
     width: "100%",
-    backgroundColor: "#ff9800",
+    backgroundColor: "#FAA21B",
     color: "#fff",
   },
   image: {
@@ -133,6 +152,7 @@ const styles = StyleSheet.create({
     height: 300,
     objectFit: "cover",
     marginTop: 8,
+    borderRadius: 8,
   },
 });
 

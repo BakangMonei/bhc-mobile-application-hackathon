@@ -64,9 +64,9 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
+      {/* <Typography variant="h4" component="h1" style={styles.title}>
         My Profile
-      </Typography>
+      </Typography> */}
       <Divider style={styles.divider} />
       {loading ? (
         <CircularProgress />
@@ -80,7 +80,7 @@ const ProfileScreen = ({ navigation }) => {
             <Typography variant="subtitle1">{currentUser?.email}</Typography>
           </View>
           <Divider style={styles.divider} />
-          <Typography variant="h6" component="h2">
+          <Typography variant="h6" component="h2" style={styles.sectionTitle}>
             Profile Information
           </Typography>
           <TextField
@@ -112,55 +112,50 @@ const ProfileScreen = ({ navigation }) => {
           />
           <Button
             variant="contained"
-            
+            style={styles.editButton}
             onClick={handleEditProfile}
-            style={styles.button}
             startIcon={<EditIcon />}
           >
             Edit Profile
           </Button>
           <Divider style={styles.divider} />
-          <Typography variant="h6" component="h2">
+          <Typography variant="h6" component="h2" style={styles.sectionTitle}>
             Password Settings
           </Typography>
           <Button
             variant="contained"
-            color="secondary"
+            style={styles.secondaryButton}
             onClick={handleChangePassword}
-            style={styles.button}
             startIcon={<LockIcon />}
           >
             Change Password
           </Button>
           <Divider style={styles.divider} />
-          <Typography variant="h6" component="h2">
+          <Typography variant="h6" component="h2" style={styles.sectionTitle}>
             Other Settings
           </Typography>
           <Button
             variant="contained"
-            color="secondary"
-            style={styles.button}
+            style={styles.secondaryButton}
             startIcon={<SettingsIcon />}
           >
             Other Setting 1
           </Button>
           <Button
             variant="contained"
-            color="secondary"
-            style={styles.button}
+            style={styles.secondaryButton}
             startIcon={<SettingsIcon />}
           >
             Other Setting 2
           </Button>
           <Divider style={styles.divider} />
-          <Typography variant="h6" component="h2">
+          <Typography variant="h6" component="h2" style={styles.sectionTitle}>
             Logout
           </Typography>
           <Button
             variant="contained"
-            color="error"
+            style={styles.logoutButton}
             onClick={handleLogout}
-            style={styles.button}
             startIcon={<LogoutIcon />}
           >
             Logout
@@ -179,15 +174,15 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 24,
-    color: "#3f51b5",
+    color: "#FAA21B",
+  },
+  sectionTitle: {
+    marginTop: 16,
+    marginBottom: 8,
+    color: "#FAA21B",
   },
   divider: {
     marginVertical: 16,
-  },
-  button: {
-    marginTop: 16,
-    width: "100%",
-    backgroundColor: "#FAA21B"
   },
   avatarContainer: {
     alignItems: "center",
@@ -195,13 +190,32 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginBottom: 16,
-    backgroundColor: "#3f51b5",
+    backgroundColor: "#FAA21B",
     width: 64,
     height: 64,
   },
   name: {
     fontWeight: "bold",
     marginBottom: 8,
+    color: "#AD2524",
+  },
+  editButton: {
+    marginTop: 16,
+    width: "100%",
+    backgroundColor: "#FAA21B",
+    color: "#fff",
+  },
+  secondaryButton: {
+    marginTop: 16,
+    width: "100%",
+    backgroundColor: "#AD2524",
+    color: "#fff",
+  },
+  logoutButton: {
+    marginTop: 16,
+    width: "100%",
+    backgroundColor: "#AD2524",
+    color: "#fff",
   },
 });
 

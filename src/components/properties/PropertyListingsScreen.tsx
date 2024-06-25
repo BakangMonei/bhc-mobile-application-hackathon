@@ -198,7 +198,6 @@ const PropertyListingsScreen = ({ navigation }) => {
           <MenuItem value="rent">Rent</MenuItem>
           <MenuItem value="sale">Sale</MenuItem>
           <MenuItem value="lease">Lease</MenuItem>
-          
         </Select>
       </FormControl>
       <View style={styles.imageContainer}>
@@ -215,12 +214,7 @@ const PropertyListingsScreen = ({ navigation }) => {
           {image ? "Change Image" : "Upload Image"}
         </Button>
       </View>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubmit}
-        style={styles.button}
-      >
+      <Button variant="contained" style={styles.button} onClick={handleSubmit}>
         Add Property
       </Button>
     </ScrollView>
@@ -230,13 +224,17 @@ const PropertyListingsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
+    color: "#AD2524",
   },
   button: {
     marginTop: 16,
+    backgroundColor: "#FAA21B",
+    color: "#fff",
   },
   imageContainer: {
     flexDirection: "row",

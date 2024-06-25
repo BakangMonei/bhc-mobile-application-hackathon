@@ -71,27 +71,27 @@ const HomeScreen = ({ navigation }) => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#FAA21B" />
       </View>
     );
   }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
+      {/* <Typography variant="h4" component="h1" style={styles.title}>
         Welcome,{" "}
         {userDetails
           ? `${userDetails.firstName} ${userDetails.lastName}`
           : "User"}
-      </Typography>
-      <Typography variant="h6" component="h2" style={styles.sectionTitle}>
+      </Typography> */}
+      <Typography variant="h6" component="h3" style={styles.sectionTitle}>
         Latest Announcements
       </Typography>
       <Carousel>
         {announcements.map((announcement) => (
           <Card key={announcement.id} style={styles.card}>
             <CardContent>
-              <Typography variant="h6" component="h2">
+              <Typography variant="h6" component="h2" style={styles.cardTitle}>
                 {announcement.title}
               </Typography>
               <Typography variant="body2" component="p">
@@ -101,19 +101,18 @@ const HomeScreen = ({ navigation }) => {
           </Card>
         ))}
       </Carousel>
-      <Typography variant="h6" component="h2" style={styles.sectionTitle}>
+      <Typography variant="h6" component="h3" style={styles.sectionTitle}>
         Quick Actions
       </Typography>
       <Carousel>
         {carouselItems.map((item, index) => (
           <Card key={index} style={styles.card}>
             <CardContent>
-              <Typography variant="h6" component="h2">
+              <Typography variant="h6" component="h2" style={styles.cardTitle}>
                 {item.title}
               </Typography>
               <Button
                 variant="contained"
-                color="primary"
                 style={styles.button}
                 onClick={item.action}
               >
@@ -124,12 +123,12 @@ const HomeScreen = ({ navigation }) => {
         ))}
       </Carousel>
 
-      <Typography variant="h6" component="h2" style={styles.sectionTitle}>
+      <Typography variant="h6" component="h3" style={styles.sectionTitle}>
         Quick Actions
       </Typography>
       <Card style={styles.card}>
         <CardContent>
-          <Typography variant="h6" component="h2">
+          <Typography variant="h6" component="h2" style={styles.cardTitle}>
             My Account
           </Typography>
           <Typography variant="body2" component="p">
@@ -137,8 +136,7 @@ const HomeScreen = ({ navigation }) => {
           </Typography>
           <Button
             variant="contained"
-            color="secondary"
-            style={styles.button}
+            style={styles.buttonSecondary}
             onClick={() => navigation.navigate("Profile")}
           >
             Go to Profile
@@ -152,20 +150,20 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
-    color: "#3f51b5",
+    color: "#AD2524",
   },
   sectionTitle: {
     marginBottom: 16,
-    color: "#3f51b5",
+    color: "#AD2524",
   },
   card: {
     marginBottom: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fff",
     borderRadius: 8,
     shadowColor: "#000",
     shadowOffset: {
@@ -176,9 +174,20 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  cardTitle: {
+    color: "#AD2524",
+  },
   button: {
     marginTop: 8,
     width: "100%",
+    backgroundColor: "#FAA21B",
+    color: "#fff",
+  },
+  buttonSecondary: {
+    marginTop: 8,
+    width: "100%",
+    backgroundColor: "#AD2524",
+    color: "#fff",
   },
   loadingContainer: {
     flex: 1,

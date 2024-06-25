@@ -21,7 +21,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { db, auth, storage } from "../../services/firebase";
+import { db, storage } from "../../services/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
 import { AuthContext } from "../../context/AuthContext";
@@ -124,9 +124,9 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
+      {/* <Typography variant="h4" component="h1" style={styles.title}>
         Maintenance Requests
-      </Typography>
+      </Typography> */}
       <TextField
         label="Request"
         value={request}
@@ -134,6 +134,7 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
         fullWidth
         margin="normal"
         variant="outlined"
+        InputLabelProps={{ style: { color: "#FAA21B" } }}
       />
       <TextField
         label="Description"
@@ -144,13 +145,15 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
         variant="outlined"
         multiline
         rows={4}
+        InputLabelProps={{ style: { color: "#FAA21B" } }}
       />
       <FormControl fullWidth margin="normal" variant="outlined">
-        <InputLabel>Status</InputLabel>
+        <InputLabel style={{ color: "#FAA21B" }}>Status</InputLabel>
         <Select
           label="Status"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
+          style={{ color: "#FAA21B" }}
         >
           <MenuItem value="Pending">Pending</MenuItem>
           <MenuItem value="In Progress">In Progress</MenuItem>
@@ -181,9 +184,8 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
       </View>
       <Button
         variant="contained"
-        color="primary"
-        onClick={handleAddRequest}
         style={styles.button}
+        onClick={handleAddRequest}
       >
         Add Request
       </Button>
@@ -217,8 +219,8 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
             <Button
               variant="contained"
               color="secondary"
+              style={styles.buttonDelete}
               onClick={() => handleDeleteRequest(req.id)}
-              style={styles.button}
             >
               Delete Request
             </Button>
@@ -244,12 +246,12 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
               fullWidth
               margin="normal"
               variant="outlined"
+              InputLabelProps={{ style: { color: "#FAA21B" } }}
             />
             <Button
               variant="contained"
-              color="primary"
-              onClick={() => handleAddComment(req.id)}
               style={styles.button}
+              onClick={() => handleAddComment(req.id)}
             >
               Add Comment
             </Button>
@@ -263,15 +265,17 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
-    color: "#ff9800",
+    color: "#AD2524",
   },
   sectionTitle: {
     marginTop: 16,
     marginBottom: 8,
+    color: "#FAA21B",
   },
   card: {
     marginBottom: 16,
@@ -286,7 +290,13 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     width: "100%",
-    backgroundColor: "#ff9800",
+    backgroundColor: "#FAA21B",
+    color: "#fff",
+  },
+  buttonDelete: {
+    marginTop: 16,
+    width: "100%",
+    backgroundColor: "#AD2524",
     color: "#fff",
   },
   imageContainer: {
