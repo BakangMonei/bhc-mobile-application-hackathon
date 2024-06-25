@@ -1,14 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
-import { Avatar, Button, Typography } from "@mui/material";
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerContentComponentProps,
+} from "@react-navigation/drawer";
+import { Avatar, Button, Typography, CircularProgress } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../services/firebase";
+import { signOut } from "firebase/auth";
+import { db, auth } from "../../services/firebase";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
-const CustomDrawerContent = (props) => {
+const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
   const { currentUser } = useContext(AuthContext);
-  const [profile, setProfile] = useState({ firstName: "", lastName: "" });
+  const [profile, setProfile] = useState<{
+    firstName: string;
+    lastName: string;
+  }>({ firstName: "", lastName: "" });
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -17,10 +27,14 @@ const CustomDrawerContent = (props) => {
           const docRef = doc(db, "s_admin", currentUser.uid);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
-            setProfile(docSnap.data());
+            setProfile(
+              docSnap.data() as { firstName: string; lastName: string }
+            );
           }
         } catch (error) {
           console.error("Error fetching user profile: ", error);
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -28,22 +42,39 @@ const CustomDrawerContent = (props) => {
     fetchProfile();
   }, [currentUser]);
 
-  const logout = () => {
-    // Implement logout functionality
-    console.log("User logged out");
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      props.navigation.navigate("Login");
+      console.log("User logged out");
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
   };
 
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.profileContainer}>
-        <Avatar style={styles.avatar} />
-        <Typography variant="h6">
-          {profile.firstName} {profile.lastName}
-        </Typography>
-        <Typography variant="subtitle1">{currentUser?.email}</Typography>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <Avatar style={styles.avatar}>{profile.firstName.charAt(0)}</Avatar>
+            <Typography variant="h6">
+              {profile.firstName} {profile.lastName}
+            </Typography>
+            <Typography variant="subtitle1">{currentUser?.email}</Typography>
+          </>
+        )}
       </View>
       <DrawerItemList {...props} />
-      <Button variant="contained" color="secondary" onClick={logout} style={styles.logoutButton}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={logout}
+        style={styles.logoutButton}
+        startIcon={<ExitToAppIcon />}
+      >
         Logout
       </Button>
     </DrawerContentScrollView>
@@ -57,9 +88,14 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginBottom: 16,
+    backgroundColor: "#3f51b5",
+    width: 64,
+    height: 64,
   },
   logoutButton: {
     marginTop: 16,
+    backgroundColor: "#d32f2f",
+    color: "#fff",
   },
 });
 
