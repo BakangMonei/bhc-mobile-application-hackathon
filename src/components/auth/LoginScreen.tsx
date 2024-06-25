@@ -78,7 +78,8 @@ const LoginScreen = ({ navigation }) => {
       if (!superAdminSnapshot.empty) {
         navigation.replace("SuperAdminDashboard");
       } else if (!adminSnapshot.empty) {
-        navigation.replace("AdminDashboard");
+        navigation.replace("AdminDrawerNavigator");
+        // navigation.replace("AdminBottomNav");
       } else if (!userSnapshot.empty) {
         navigation.replace("Home");
       } else {

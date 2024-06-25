@@ -14,6 +14,9 @@ import AdminDashboard from "./components/common/AdminBottomNav";
 import AddUserForm from "./components/forms/AddUserForm";
 import InformationCenterScreen from "./components/information/InformationCenterScreen";
 import InquiryFormScreen from "./components/information/InquiryFormScreen";
+import AdminHomeScreen from "./roles/admin/AdminHomeScreen";
+import AdminDrawerNavigator  from "./navigation/AdminDrawerNavigator";
+import AdminBottomNav from "./components/common/AdminBottomNav";
 
 const Stack = createStackNavigator();
 
@@ -55,6 +58,10 @@ const App: React.FC = () => {
             name="FAQStackNavigator"
             component={FAQStackNavigator}
           />
+
+          <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />
+          <Stack.Screen name="AdminDrawerNavigator" component={AdminDrawerNavigator} />
+          <Stack.Screen name="AdminBottomNav" component={AdminBottomNav} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

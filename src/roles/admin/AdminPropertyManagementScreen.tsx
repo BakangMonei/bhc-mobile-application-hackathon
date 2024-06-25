@@ -4,17 +4,17 @@ import { TextInput, Button, Card, Title, Paragraph, ActivityIndicator } from "re
 import { collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 
-const AdminUserSupportScreen: React.FC = () => {
-  const [inquiries, setInquiries] = useState<any[]>([]);
+const AdminPropertyManagementScreen: React.FC = () => {
+  const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "inquiries"), (snapshot) => {
-      const fetchedInquiries = snapshot.docs.map((doc) => ({
+    const unsubscribe = onSnapshot(collection(db, "properties"), (snapshot) => {
+      const fetchedProperties = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setInquiries(fetchedInquiries);
+      setProperties(fetchedProperties);
       setLoading(false);
     });
 
@@ -26,12 +26,13 @@ const AdminUserSupportScreen: React.FC = () => {
       {loading ? (
         <ActivityIndicator size="large" />
       ) : (
-        inquiries.map((inquiry) => (
-          <Card key={inquiry.id} style={styles.card}>
+        properties.map((property) => (
+          <Card key={property.id} style={styles.card}>
             <Card.Content>
-              <Title>{inquiry.title}</Title>
-              <Paragraph>{inquiry.description}</Paragraph>
-              <Button onPress={() => {}}>Respond</Button>
+              <Title>{property.title}</Title>
+              <Paragraph>{property.description}</Paragraph>
+              <Button onPress={() => {}}>Edit</Button>
+              <Button onPress={() => {}}>Delete</Button>
             </Card.Content>
           </Card>
         ))
@@ -49,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminUserSupportScreen;
+export default AdminPropertyManagementScreen;
