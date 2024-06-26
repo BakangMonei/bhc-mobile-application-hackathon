@@ -34,7 +34,7 @@ const AdminBottomNav: React.FC = () => {
             iconName = "home";
           } else if (route.name === "Profile") {
             iconName = "person";
-          } else if (route.name === "Admin") {
+          } else if (route.name === "Property List") {
             iconName = "admin-panel-settings";
           }
           return <Icon name={iconName} size={size} color={color} />;
@@ -47,7 +47,7 @@ const AdminBottomNav: React.FC = () => {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Profile" component={ProfileStackNavigator} />
-      <Tab.Screen name="Admin" component={AdminPropertyManagementScreen} />
+      <Tab.Screen name="Property List" component={AdminPropertyManagementScreen} />
     </Tab.Navigator>
   );
 };

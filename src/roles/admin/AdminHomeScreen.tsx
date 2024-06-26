@@ -27,9 +27,6 @@ const AdminHomeScreen: React.FC = () => {
           </Card.Content>
         </Card>
 
-
-        
-
       </View>
     </ImageBackground>
   );

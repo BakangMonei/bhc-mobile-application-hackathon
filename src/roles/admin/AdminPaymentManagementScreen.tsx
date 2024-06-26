@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View, Modal, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import {
   TextField,
   Button,
@@ -9,9 +15,14 @@ import {
   CircularProgress,
   IconButton,
 } from "@mui/material";
-import { collection, onSnapshot, updateDoc, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  updateDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "../../services/firebase";
-import Icon from "react-native-vector-icons/MaterialIcons";
 import PrintIcon from "@mui/icons-material/Print";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -64,7 +75,7 @@ const AdminPaymentManagementScreen = () => {
 
   const handlePrint = () => {
     // Implement your print functionality here
-    alert('Print functionality to be implemented');
+    alert("Print functionality to be implemented");
   };
 
   const handleCloseModal = () => {
@@ -75,18 +86,21 @@ const AdminPaymentManagementScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* <Typography variant="h4" component="h1" style={styles.title}>
+      <Typography variant="h4" component="h1" style={styles.title}>
         Payment Management
-      </Typography> */}
+      </Typography>
       {loading ? (
         <CircularProgress />
       ) : (
         payments.map((payment) => (
-          <TouchableOpacity key={payment.id} onPress={() => handleCardClick(payment)}>
+          <TouchableOpacity
+            key={payment.id}
+            onPress={() => handleCardClick(payment)}
+          >
             <Card style={styles.card}>
               <CardContent>
                 <Typography variant="h6" component="h2">
-                  User: {payment.uid}
+                  Payment ID: {payment.id}
                 </Typography>
                 <Typography variant="body2" component="p">
                   Amount: {payment.amount}
@@ -186,7 +200,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 24,
-    color: "#ff9800",
+    color: "#FAA21B",
   },
   card: {
     marginBottom: 16,
@@ -201,7 +215,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     width: "100%",
-    backgroundColor: "#ff9800",
+    backgroundColor: "#FAA21B",
     color: "#fff",
   },
   modalContainer: {
@@ -219,7 +233,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     marginBottom: 16,
-    color: "#ff9800",
+    color: "#FAA21B",
   },
   modalActions: {
     flexDirection: "row",
@@ -228,12 +242,12 @@ const styles = StyleSheet.create({
   },
   printButton: {
     marginTop: 16,
-    backgroundColor: "#ff9800",
+    backgroundColor: "#FAA21B",
     color: "#fff",
   },
   closeButton: {
     marginTop: 16,
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#AD2524",
     color: "#fff",
   },
 });

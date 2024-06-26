@@ -87,6 +87,7 @@ const HomeScreen = ({ navigation }) => {
       <Typography variant="h6" component="h3" style={styles.sectionTitle}>
         Latest Announcements
       </Typography>
+
       <Carousel>
         {announcements.map((announcement) => (
           <Card key={announcement.id} style={styles.card}>
@@ -104,6 +105,7 @@ const HomeScreen = ({ navigation }) => {
           </Card>
         ))}
       </Carousel>
+      
       <Typography variant="h6" component="h3" style={styles.sectionTitle}>
         Quick Actions
       </Typography>
