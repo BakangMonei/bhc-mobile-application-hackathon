@@ -25,8 +25,8 @@ To run the mobile app on your local machine, follow these steps:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-repo/smart-housing-tech-app.git
-   cd smart-housing-tech-app
+   git clone https://github.com/BakangMonei/bhc-mobile-application-hackathon
+   cd bhc-mobile-application-hackathon
    ```
 
 2. **Install dependencies:**
