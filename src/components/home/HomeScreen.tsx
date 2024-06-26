@@ -95,7 +95,10 @@ const HomeScreen = ({ navigation }) => {
                 {announcement.title}
               </Typography>
               <Typography variant="body2" component="p">
-                {announcement.content}
+                {announcement.description}
+              </Typography>
+              <Typography variant="body2" component="p">
+                {announcement.author}
               </Typography>
             </CardContent>
           </Card>

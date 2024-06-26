@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
-import { ScrollView, StyleSheet, Image, View } from "react-native";
+import { ScrollView, StyleSheet, Image, View, Alert } from "react-native";
 import {
   Typography,
   Card,
   CardContent,
   Button,
   TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   collection,
@@ -21,6 +25,8 @@ const AdminMaintenanceOversightScreen = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const [maintenanceRequests, setMaintenanceRequests] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -47,27 +53,41 @@ const AdminMaintenanceOversightScreen = ({ navigation }) => {
     }
   };
 
-  const handleAddComment = async (id) => {
+  const handleAddComment = async () => {
     if (!newComment) return;
     try {
-      await addDoc(collection(db, "maintenanceRequests", id, "comments"), {
-        content: newComment,
-        userId: currentUser.uid,
-        firstName: currentUser.firstName,
-        timestamp: new Date(),
-      });
+      await addDoc(
+        collection(db, "maintenanceRequests", selectedRequest.id, "comments"),
+        {
+          content: newComment,
+          userId: currentUser.uid,
+          firstName: currentUser.firstName,
+          timestamp: new Date(),
+        }
+      );
       setNewComment("");
+      setDialogOpen(false);
       console.log("Comment added successfully");
     } catch (error) {
       console.error("Error adding comment:", error);
     }
   };
 
+  const handleOpenDialog = (request) => {
+    setSelectedRequest(request);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedRequest(null);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
+      {/* <Typography variant="h4" component="h1" style={styles.title}>
         Maintenance Oversight
-      </Typography>
+      </Typography> */}
       {maintenanceRequests.map((req) => (
         <Card key={req.id} style={styles.card}>
           <CardContent>
@@ -101,7 +121,7 @@ const AdminMaintenanceOversightScreen = ({ navigation }) => {
                 Mark Completed
               </Button>
             </View>
-            <Typography variant="h6" component="h2">
+            <Typography variant="h6" component="h2" style={styles.sectionTitle}>
               Responses
             </Typography>
             {req.responses &&
@@ -116,18 +136,10 @@ const AdminMaintenanceOversightScreen = ({ navigation }) => {
                   </Typography>
                 </View>
               ))}
-            <TextField
-              label="Add a comment"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-            />
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleAddComment(req.id)}
+              onClick={() => handleOpenDialog(req)}
               style={styles.button}
             >
               Add Comment
@@ -135,6 +147,30 @@ const AdminMaintenanceOversightScreen = ({ navigation }) => {
           </CardContent>
         </Card>
       ))}
+
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Add Comment</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Comment"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            multiline
+            rows={4}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleAddComment} color="primary">
+            Add Comment
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ScrollView>
   );
 };
@@ -147,7 +183,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 24,
-    color: "#ff9800",
+    color: "#FAA21B",
   },
   card: {
     marginBottom: 16,
@@ -161,8 +197,8 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
-    width: "100%",
-    backgroundColor: "#ff9800",
+    width: "48%",
+    backgroundColor: "#FAA21B",
     color: "#fff",
   },
   buttonContainer: {
@@ -174,6 +210,10 @@ const styles = StyleSheet.create({
     height: 150,
     objectFit: "cover",
     marginTop: 8,
+  },
+  sectionTitle: {
+    marginTop: 16,
+    color: "#AD2524",
   },
   response: {
     marginTop: 8,

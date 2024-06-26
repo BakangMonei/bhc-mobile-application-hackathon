@@ -75,9 +75,9 @@ const AdminPaymentManagementScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
+      {/* <Typography variant="h4" component="h1" style={styles.title}>
         Payment Management
-      </Typography>
+      </Typography> */}
       {loading ? (
         <CircularProgress />
       ) : (
