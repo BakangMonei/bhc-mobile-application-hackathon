@@ -1,50 +1,113 @@
-# Welcome to your Expo app 👋
+# Smart Housing Tech Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Overview
 
-## Get started
+This mobile app is designed to empower Botswana's youth through smart housing technology. It includes features such as user authentication, property listings, maintenance requests, payments, and an information center. The app is built with a focus on providing an intuitive and aesthetically pleasing user experience.
 
-1. Install dependencies
+## Tools and Technologies Used
+
+- **Language:** JSX, TSX
+- **Database:** Firebase
+- **State Management:** Redux
+- **Tools Used:** VSCode
+- **Hardware:** MacBook Air M1
+- **Cloud:** Firebase Functions
+- **Framework:** Material UI, Native-Wind
+- **Prototyping:** FIGMA
+- **Server Side:** Node 18
+
+## Installation and Setup
+
+### Clone the Repository
+
+To run the mobile app on your local machine, follow these steps:
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/your-repo/smart-housing-tech-app.git
+   cd smart-housing-tech-app
+   ```
+
+2. **Install dependencies:**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. **Set up Firebase:**
+
+   - Create a Firebase project.
+   - Add your Firebase project's configuration to the `firebaseConfig.js` file.
+
+4. **Start the development server:**
 
    ```bash
-    npx expo start
+   npm start
    ```
 
-In the output, you'll find options to open the app in a
+### Downloading the ZIP File
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+If you prefer to download the ZIP file:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+1. **Download the ZIP file from GitHub.**
+2. **Extract the ZIP file to your desired location.**
+3. **Navigate to the project directory:**
 
-## Get a fresh project
+   ```bash
+   cd path-to-extracted-folder
+   ```
 
-When you're ready, run:
+4. **Install dependencies:**
 
-```bash
-npm run reset-project
-```
+   ```bash
+   npm install
+   ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+5. **Set up Firebase:**
 
-## Learn more
+   - Create a Firebase project.
+   - Add your Firebase project's configuration to the `firebaseConfig.js` file.
 
-To learn more about developing your project with Expo, look at the following resources:
+6. **Start the development server:**
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+   ```bash
+   npm start
+   ```
 
-## Join the community
+## Running on Localhost
 
-Join our community of developers creating universal apps.
+1. **Ensure you have Node.js installed (version 18 or above).**
+2. **Clone the repository or download the ZIP file as mentioned above.**
+3. **Navigate to the project directory and install dependencies.**
+4. **Run the development server:**
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+   ```bash
+   npm start
+   ```
+
+5. **Use Expo Go app on your mobile device to scan the QR code displayed in the terminal or browser.**
+
+## Pushing to Production (Expo)
+
+1. **Build the project:**
+
+   ```bash
+   expo build:android
+   expo build:ios
+   ```
+
+2. **Follow the instructions provided by Expo to upload your app to the app stores.**
+
+## Authors
+
+- **Mr. Bakang Monei Motshegwe** - FullStack Developer
+- **Mr. Thabo Israel** - FullStack Developer
+- **Mr. Mokwadi Gibe** - System Analyst
+- **Mr. Richard Motladiile** - UI/UX
+- **Ms. Thato Mitchell Chamile** - Business Analyst
+- **Ms. Wamasego Isabella Batshogile** - Business Analyst
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
