@@ -235,9 +235,6 @@ const SuperAdminHomeScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
-        Home
-      </Typography>
       {(currentUser.role === "admin" || currentUser.role === "superadmin") && (
         <>
           <Fab

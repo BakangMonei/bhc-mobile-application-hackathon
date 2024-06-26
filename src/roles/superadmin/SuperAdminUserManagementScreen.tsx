@@ -168,9 +168,6 @@ const SuperAdminUserManagementScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
-        User Management
-      </Typography>
       <Card style={styles.card}>
         <CardContent>
           <Typography variant="h6" component="h2">

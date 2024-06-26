@@ -134,9 +134,9 @@ const SuperAdminAnalyticsReportingScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
+      {/* <Typography variant="h4" component="h1" style={styles.title}>
         Analytics & Reporting
-      </Typography>
+      </Typography> */}
       {loading ? (
         <CircularProgress />
       ) : (

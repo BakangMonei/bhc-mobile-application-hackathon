@@ -66,9 +66,6 @@ const SuperAdminMaintenanceOversightScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Typography variant="h4" component="h1" style={styles.title}>
-        Maintenance Oversight
-      </Typography>
       {maintenanceRequests.map((req) => (
         <Card key={req.id} style={styles.card}>
           <CardContent>
