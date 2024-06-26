@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   card: {
     marginBottom: 16,
-    backgroundColor: "gray",
+    backgroundColor: "white",
   },
   button: {
     marginTop: 16,

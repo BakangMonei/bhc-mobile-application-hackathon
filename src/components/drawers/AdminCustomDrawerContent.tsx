@@ -8,7 +8,7 @@ import {
 import { Avatar, Button, Typography, CircularProgress } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../services/firebase";
+import { db, auth } from "../../services/firebase";
 
 const AdminCustomDrawerContent: React.FC<DrawerContentComponentProps> = (
   props
@@ -42,9 +42,24 @@ const AdminCustomDrawerContent: React.FC<DrawerContentComponentProps> = (
     fetchProfile();
   }, [currentUser]);
 
-  const logout = () => {
-    // Implement logout functionality
-    console.log("User logged out");
+  // const logout = async () => {
+  //   try {
+  //     await auth.signOut();
+  //     props.navigation.navigate("Login");
+  //     console.log("User logged out");
+  //   } catch (error) {
+  //     console.error("Error logging out: ", error);
+  //   }
+  // };
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      props.navigation.navigate("Login");
+      console.log("User logged out");
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
   };
 
   return (
@@ -88,6 +103,8 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginTop: 16,
+    width: "90%",
+    marginHorizontal: "5%",
   },
 });
 

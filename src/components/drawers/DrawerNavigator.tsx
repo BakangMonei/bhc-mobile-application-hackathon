@@ -3,7 +3,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import BottomNav from "../common/BottomNav";
 import FAQStackNavigator from "../../navigation/FAQStackNavigator";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import InboxScreen from "../messaging/InboxScreen"
+import InboxScreen from "../messaging/InboxScreen";
 import MessageSendScreen from "../messaging/MessageSendScreen";
 import MessageDetailScreen from "../messaging/MessageDetailScreen";
 import UserCustomDrawerContent from "./UserCustomDrawerContent"; // Assuming the path to your custom drawer content
@@ -12,7 +12,9 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigator: React.FC = () => {
   return (
-    <Drawer.Navigator drawerContent={(props) => <UserCustomDrawerContent{...props} />}>
+    <Drawer.Navigator
+      drawerContent={(props) => <UserCustomDrawerContent {...props} />}
+    >
       <Drawer.Screen
         name="Home"
         component={BottomNav}
