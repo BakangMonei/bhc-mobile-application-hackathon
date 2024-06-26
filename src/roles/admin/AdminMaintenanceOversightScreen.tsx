@@ -10,7 +10,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton,
 } from "@mui/material";
+import AddCommentIcon from "@mui/icons-material/AddComment";
+import DoneIcon from "@mui/icons-material/Done";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import CommentIcon from "@mui/icons-material/Comment";
 import {
   collection,
   onSnapshot,
@@ -85,13 +90,11 @@ const AdminMaintenanceOversightScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* <Typography variant="h4" component="h1" style={styles.title}>
-        Maintenance Oversight
-      </Typography> */}
+
       {maintenanceRequests.map((req) => (
         <Card key={req.id} style={styles.card}>
           <CardContent>
-            <Typography variant="body2" component="p">
+            <Typography variant="h6" component="h2">
               {req.request}
             </Typography>
             <Typography variant="body2" component="p">
@@ -108,6 +111,7 @@ const AdminMaintenanceOversightScreen = ({ navigation }) => {
                 variant="contained"
                 color="primary"
                 onClick={() => handleUpdateStatus(req.id, "In Progress")}
+                startIcon={<HourglassEmptyIcon />}
                 style={styles.button}
               >
                 Mark In Progress
@@ -116,6 +120,7 @@ const AdminMaintenanceOversightScreen = ({ navigation }) => {
                 variant="contained"
                 color="secondary"
                 onClick={() => handleUpdateStatus(req.id, "Completed")}
+                startIcon={<DoneIcon />}
                 style={styles.button}
               >
                 Mark Completed
@@ -136,14 +141,13 @@ const AdminMaintenanceOversightScreen = ({ navigation }) => {
                   </Typography>
                 </View>
               ))}
-            <Button
-              variant="contained"
+            <IconButton
               color="primary"
               onClick={() => handleOpenDialog(req)}
-              style={styles.button}
+              style={styles.commentButton}
             >
-              Add Comment
-            </Button>
+              <AddCommentIcon />
+            </IconButton>
           </CardContent>
         </Card>
       ))}
@@ -220,6 +224,9 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: "#f5f5f5",
     borderRadius: 4,
+  },
+  commentButton: {
+    marginTop: 16,
   },
 });
 

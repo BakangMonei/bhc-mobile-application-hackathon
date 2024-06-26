@@ -10,7 +10,14 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
 } from "@mui/material";
+import AddCommentIcon from "@mui/icons-material/AddComment";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   collection,
   addDoc,
@@ -34,6 +41,8 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
   const [image, setImage] = useState(null);
   const [maintenanceRequests, setMaintenanceRequests] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
     if (currentUser) {
@@ -116,17 +125,25 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
         timestamp: serverTimestamp(),
       });
       setNewComment("");
+      setDialogOpen(false);
       console.log("Comment added successfully");
     } catch (error) {
       console.error("Error adding comment:", error);
     }
   };
 
+  const handleOpenDialog = (request) => {
+    setSelectedRequest(request);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedRequest(null);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* <Typography variant="h4" component="h1" style={styles.title}>
-        Maintenance Requests
-      </Typography> */}
       <TextField
         label="Request"
         value={request}
@@ -221,6 +238,7 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
               color="secondary"
               style={styles.buttonDelete}
               onClick={() => handleDeleteRequest(req.id)}
+              startIcon={<DeleteIcon />}
             >
               Delete Request
             </Button>
@@ -239,25 +257,43 @@ const MaintenanceRequestsScreen = ({ navigation }) => {
                   </Typography>
                 </View>
               ))}
-            <TextField
-              label="Add a comment"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              fullWidth
-              margin="normal"
-              variant="outlined"
-              InputLabelProps={{ style: { color: "#FAA21B" } }}
-            />
-            <Button
-              variant="contained"
-              style={styles.button}
-              onClick={() => handleAddComment(req.id)}
+            <IconButton
+              color="primary"
+              onClick={() => handleOpenDialog(req)}
+              style={styles.commentButton}
             >
-              Add Comment
-            </Button>
+              <AddCommentIcon />
+            </IconButton>
           </CardContent>
         </Card>
       ))}
+
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Add Comment</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Comment"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            multiline
+            rows={4}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleAddComment(selectedRequest.id)}
+            color="primary"
+          >
+            Add Comment
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ScrollView>
   );
 };
@@ -320,6 +356,9 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: "#f5f5f5",
     borderRadius: 4,
+  },
+  commentButton: {
+    marginTop: 16,
   },
 });
 

@@ -6,7 +6,13 @@ import {
   CardContent,
   TextField,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
 } from "@mui/material";
+import AddCommentIcon from "@mui/icons-material/AddComment";
 import {
   collection,
   addDoc,
@@ -21,6 +27,7 @@ const MaintenanceDetailScreen = ({ route }) => {
   const { currentUser } = useContext(AuthContext);
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const q = collection(db, "maintenanceRequests", requestId, "comments");
@@ -48,9 +55,18 @@ const MaintenanceDetailScreen = ({ route }) => {
         }
       );
       setNewComment("");
+      setDialogOpen(false);
     } catch (error) {
       console.error("Error adding comment:", error);
     }
+  };
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
 
   return (
@@ -96,22 +112,37 @@ const MaintenanceDetailScreen = ({ route }) => {
           </CardContent>
         </Card>
       ))}
-      <TextField
-        label="Add a comment"
-        value={newComment}
-        onChange={(e) => setNewComment(e.target.value)}
-        fullWidth
-        margin="normal"
-        variant="outlined"
-        InputLabelProps={{ style: { color: "#FAA21B" } }}
-      />
-      <Button
-        variant="contained"
-        style={styles.button}
-        onClick={handleAddComment}
+      <IconButton
+        color="primary"
+        onClick={handleOpenDialog}
+        style={styles.commentButton}
       >
-        Add Comment
-      </Button>
+        <AddCommentIcon />
+      </IconButton>
+
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Add Comment</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Comment"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            multiline
+            rows={4}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleAddComment} color="primary">
+            Add Comment
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ScrollView>
   );
 };
@@ -153,6 +184,9 @@ const styles = StyleSheet.create({
     objectFit: "cover",
     marginTop: 8,
     borderRadius: 8,
+  },
+  commentButton: {
+    marginTop: 16,
   },
 });
 
