@@ -24,7 +24,7 @@ import ForgotPassword from "./components/auth/ForgotPassword";
 import InboxScreen from "./components/messaging/InboxScreen";
 import MessageSendScreen from "./components/messaging/MessageSendScreen";
 import MessageDetailScreen from "./components/messaging/MessageDetailScreen";
-
+import AdminProfileScreen from "./roles/admin/adminauth/AdminProfileScreen";
 const Stack = createStackNavigator();
 
 const FAQStackNavigator = () => {
@@ -75,6 +75,7 @@ const App: React.FC = () => {
           <Stack.Screen name="MessageSendScreen" component={MessageSendScreen}/>
           <Stack.Screen name="InboxScreen" component={InboxScreen}/>
           <Stack.Screen name="MessageDetailScreen" component={MessageDetailScreen}/>
+          <Stack.Screen name="AdminProfileScreen" component={AdminProfileScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

@@ -1,11 +1,28 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../../roles/admin/AdminHomeScreen";
-import AdminPaymentManagementScreen from "../../roles/admin/AdminPaymentManagementScreen";
-import AdminPropertyManagementScreen from "../../roles/admin/AdminPropertyManagementScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import HomeScreen from "@/src/roles/admin/AdminHomeScreen";
+import AdminPaymentManagementScreen from "@/src/roles/admin/AdminPaymentManagementScreen";
+import AdminPropertyManagementScreen from "@/src/roles/admin/AdminPropertyManagementScreen";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import AdminProfileScreen from "@/src/roles/admin/adminauth/AdminProfileScreen";
+import AdminEditProfileScreen from "@/src/roles/admin/adminauth/AdminEditProfileScreen";
+import AdminChangePassword from "@/src/roles/admin/adminauth/AdminChangePassword";
+
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const ProfileStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Profile" component={AdminProfileScreen} />
+      <Stack.Screen name="EditProfileScreen" component={AdminEditProfileScreen} />
+      <Stack.Screen name="ChangePassword" component={AdminChangePassword} />
+    </Stack.Navigator>
+  );
+};
+
 
 const AdminBottomNav: React.FC = () => {
   return (
@@ -29,7 +46,7 @@ const AdminBottomNav: React.FC = () => {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Profile" component={AdminPaymentManagementScreen} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
       <Tab.Screen name="Admin" component={AdminPropertyManagementScreen} />
     </Tab.Navigator>
   );
