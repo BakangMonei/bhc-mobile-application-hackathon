@@ -1,11 +1,5 @@
 #!/usr/bin/env node
 
-/**
- * This script is used to reset the project to a blank state.
- * It moves the /app directory to /app-example and creates a new /app directory with an index.tsx and _layout.tsx file.
- * You can remove the `reset-project` script from package.json and safely delete this file after running it.
- */
-
 const fs = require('fs');
 const path = require('path');
 
@@ -41,6 +35,27 @@ export default function RootLayout() {
   );
 }
 `;
+
+// Function to delete a directory and its contents
+const deleteDirectory = (dirPath) => {
+  if (fs.existsSync(dirPath)) {
+    fs.readdirSync(dirPath).forEach((file, index) => {
+      const currentPath = path.join(dirPath, file);
+      if (fs.lstatSync(currentPath).isDirectory()) {
+        deleteDirectory(currentPath);
+      } else {
+        fs.unlinkSync(currentPath);
+      }
+    });
+    fs.rmdirSync(dirPath);
+  }
+};
+
+// Delete newDirPath if it exists
+if (fs.existsSync(newDirPath)) {
+  console.log('/app-example directory exists, deleting it.');
+  deleteDirectory(newDirPath);
+}
 
 fs.rename(oldDirPath, newDirPath, (error) => {
   if (error) {

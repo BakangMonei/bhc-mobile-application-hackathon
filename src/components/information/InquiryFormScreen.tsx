@@ -113,12 +113,7 @@ const InquiryFormScreen = ({ navigation }) => {
         multiline
         rows={4}
       />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubmit}
-        style={styles.button}
-      >
+      <Button variant="contained" onClick={handleSubmit} style={styles.button}>
         Submit
       </Button>
     </ScrollView>
@@ -128,14 +123,18 @@ const InquiryFormScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "#fff",
   },
   title: {
     textAlign: "center",
     marginBottom: 24,
+    color: "#FAA21B",
   },
   button: {
     marginTop: 16,
     width: "100%",
+    backgroundColor: "#FAA21B",
+    color: "#fff",
   },
 });
 

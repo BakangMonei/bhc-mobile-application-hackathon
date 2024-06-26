@@ -12,7 +12,9 @@ import { signOut } from "firebase/auth";
 import { db, auth } from "../../services/firebase";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
-const UserCustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
+const UserCustomDrawerContent: React.FC<DrawerContentComponentProps> = (
+  props
+) => {
   const { currentUser } = useContext(AuthContext);
   const [profile, setProfile] = useState<{
     firstName: string;
@@ -68,15 +70,17 @@ const UserCustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) =
         )}
       </View>
       <DrawerItemList {...props} />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={logout}
-        style={styles.logoutButton}
-        startIcon={<ExitToAppIcon />}
-      >
-        Logout
-      </Button>
+      <View style={styles.footer}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={logout}
+          style={styles.logoutButton}
+          startIcon={<ExitToAppIcon />}
+        >
+          Logout
+        </Button>
+      </View>
     </DrawerContentScrollView>
   );
 };
@@ -88,13 +92,18 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginBottom: 16,
-    backgroundColor: "#3f51b5",
+    backgroundColor: "#FAA21B",
     width: 64,
     height: 64,
   },
+  footer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    padding: 16,
+  },
   logoutButton: {
-    marginTop: 16,
-    backgroundColor: "#d32f2f",
+    width: "100%",
+    backgroundColor: "#AD2524",
     color: "#fff",
   },
 });
